@@ -1,0 +1,861 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<!-- === СЧЁТЧИК ===
+     Вставьте сюда код Яндекс Метрики (и добавьте  window.YM_ID = ВАШ_НОМЕР; )
+     или Google Analytics. События: quiz_start, quiz_finish (level, score), cta_click (level). -->
+<title>Команда — Бизнес — Технологии</title>
+<meta name="description" content="Тест для руководителей: насколько зрелая ваша управленческая архитектура — команда, бизнес, технологии и ИИ. 12 вопросов, 3 минуты.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Pixelify+Sans:wght@500;700&family=Press+Start+2P&display=swap">
+<style>
+  :root {
+    --forest: #102E2A;
+    --forest-deep: #0B211E;
+    --ink: #1E1E1E;
+    --paper: #FFFFFF;
+    --mist: #F2F4F1;
+    --line: #D6DBD9;
+    --lime: #EFF6AC;
+    --cream: #FBFFD6;
+    --leaf: #6FAF79;
+    --leaf-deep: #4E8F5A;
+    --pink: #FFA6BF;
+    --muted: #6B7572;
+    --muted-on-dark: #A9BDB6;
+    --shadow: 4px 4px 0 var(--ink);
+    --font-body: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+    --font-display: "Pixelify Sans", "Montserrat", Arial, sans-serif;
+    --font-pixel: "Press Start 2P", "Courier New", monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--forest);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background:
+      linear-gradient(transparent 95%, rgba(255,255,255,0.045) 95%) 0 0 / 100% 12px,
+      linear-gradient(90deg, transparent 95%, rgba(255,255,255,0.045) 95%) 0 0 / 12px 100%,
+      var(--forest);
+  }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 24px;
+    max-width: 760px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .brand {
+    font-family: var(--font-pixel);
+    font-size: 10px;
+    color: var(--lime);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .brand .dot {
+    width: 10px; height: 10px;
+    background: var(--lime);
+    box-shadow: 4px 0 0 var(--leaf), 8px 0 0 var(--pink);
+    margin-right: 8px;
+  }
+
+  .counter {
+    font-family: var(--font-pixel);
+    font-size: 10px;
+    color: var(--muted-on-dark);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .counter b { color: var(--lime); font-weight: 400; }
+
+  main {
+    flex: 1;
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 8px 24px 40px;
+  }
+
+  .screen[hidden] { display: none; }
+
+  /* ---------- Hero ---------- */
+  .hero { color: var(--paper); padding: 24px 0 8px; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 10px 8px; margin-bottom: 26px; }
+
+  .tag {
+    font-family: var(--font-pixel);
+    font-size: 9px;
+    line-height: 1;
+    text-transform: uppercase;
+    padding: 10px 12px;
+    border: 2px solid var(--ink);
+    box-shadow: var(--shadow);
+    color: var(--ink);
+  }
+  .tag--lime { background: var(--lime); transform: rotate(-2deg); }
+  .tag--pink { background: var(--pink); transform: rotate(1.5deg); }
+  .tag--leaf { background: var(--leaf); transform: rotate(-1deg); }
+
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(30px, 6vw, 48px);
+    line-height: 1.08;
+    margin: 0 0 18px;
+    text-wrap: balance;
+    max-width: 16ch;
+  }
+
+  .hero p {
+    max-width: 58ch;
+    margin: 0 0 14px;
+    color: #E3EAE7;
+  }
+
+  .hero .lead { font-size: 18px; font-weight: 500; color: var(--paper); }
+
+  .pixel-art {
+    display: block;
+    width: 100%;
+    max-width: 380px;
+    height: auto;
+    margin: 12px 0 24px;
+    image-rendering: pixelated;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 28px;
+    margin: 22px 0 28px;
+    font-family: var(--font-pixel);
+    font-size: 9px;
+    color: var(--muted-on-dark);
+    line-height: 1.8;
+  }
+  .meta span::before { content: "■ "; color: var(--lime); }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    appearance: none;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 15px;
+    padding: 14px 22px;
+    border: 2px solid var(--ink);
+    background: var(--lime);
+    color: var(--ink);
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: transform 80ms steps(2), box-shadow 80ms steps(2);
+  }
+  .btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+  .btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--ink); }
+  .btn:focus-visible { outline: 3px solid var(--pink); outline-offset: 3px; }
+  .btn--ghost { background: var(--paper); }
+  .btn--dark { background: var(--forest); color: var(--paper); border-color: var(--lime); box-shadow: 4px 4px 0 var(--lime); }
+  .btn--dark:hover { box-shadow: 6px 6px 0 var(--lime); }
+  .btn--dark:active { box-shadow: 2px 2px 0 var(--lime); }
+  .btn[disabled] { opacity: 0.4; cursor: default; transform: none; box-shadow: var(--shadow); }
+  .btn .arrow { font-family: var(--font-pixel); font-size: 10px; }
+
+  /* ---------- Quiz card ---------- */
+  .card {
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    box-shadow: 8px 8px 0 var(--ink);
+    padding: 28px 28px 24px;
+    margin-top: 10px;
+  }
+
+  .progress {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 4px;
+    margin-bottom: 22px;
+  }
+  .progress i {
+    display: block;
+    height: 10px;
+    background: var(--mist);
+    border: 2px solid var(--ink);
+  }
+  .progress i.done { background: var(--leaf); }
+  .progress i.now { background: var(--lime); }
+
+  .q-label {
+    font-family: var(--font-pixel);
+    font-size: 9px;
+    color: var(--leaf-deep);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .q-label .axis { color: var(--muted); }
+
+  h2.q-text {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(22px, 4vw, 30px);
+    line-height: 1.15;
+    margin: 0 0 22px;
+    text-wrap: balance;
+  }
+
+  .options { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+
+  .opt {
+    appearance: none;
+    width: 100%;
+    text-align: left;
+    font-family: var(--font-body);
+    font-size: 15.5px;
+    line-height: 1.45;
+    font-weight: 500;
+    display: grid;
+    grid-template-columns: 34px 1fr;
+    gap: 14px;
+    align-items: start;
+    padding: 14px 16px;
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    color: var(--ink);
+    cursor: pointer;
+    transition: background 80ms steps(2), transform 80ms steps(2), box-shadow 80ms steps(2);
+  }
+  .opt .key {
+    font-family: var(--font-pixel);
+    font-size: 11px;
+    line-height: 1;
+    width: 34px; height: 34px;
+    display: grid; place-items: center;
+    border: 2px solid var(--ink);
+    background: var(--mist);
+    margin-top: -2px;
+  }
+  .opt:hover { background: var(--cream); transform: translate(-2px, -2px); box-shadow: var(--shadow); }
+  .opt:focus-visible { outline: 3px solid var(--pink); outline-offset: 2px; }
+  .opt.selected { background: var(--lime); box-shadow: var(--shadow); transform: translate(-2px,-2px); }
+  .opt.selected .key { background: var(--ink); color: var(--lime); }
+
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 2px dashed var(--line);
+  }
+  .hint { font-family: var(--font-pixel); font-size: 8px; color: var(--muted); line-height: 1.8; }
+
+  /* ---------- Result ---------- */
+  .result { color: var(--paper); padding-top: 12px; }
+
+  .score-line {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .score {
+    font-family: var(--font-pixel);
+    font-size: clamp(28px, 6vw, 44px);
+    color: var(--lime);
+    line-height: 1;
+  }
+  .score small { font-size: 12px; color: var(--muted-on-dark); margin-left: 8px; }
+
+  .level-tag {
+    display: inline-block;
+    font-family: var(--font-pixel);
+    font-size: 9px;
+    text-transform: uppercase;
+    background: var(--pink);
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    box-shadow: var(--shadow);
+    padding: 10px 12px;
+    transform: rotate(-1.5deg);
+    margin: 10px 0 18px;
+  }
+
+  .result h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(28px, 5.5vw, 42px);
+    line-height: 1.1;
+    margin: 0 0 12px;
+    text-wrap: balance;
+  }
+
+  .result .desc { max-width: 60ch; color: #E3EAE7; margin: 0 0 26px; }
+
+  .two {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+    margin-bottom: 26px;
+  }
+  .panel {
+    border: 2px solid var(--ink);
+    box-shadow: var(--shadow);
+    padding: 18px 20px;
+    color: var(--ink);
+  }
+  .panel--lime { background: var(--lime); }
+  .panel--paper { background: var(--paper); }
+  .panel h3 {
+    font-family: var(--font-pixel);
+    font-size: 9px;
+    text-transform: uppercase;
+    margin: 0 0 10px;
+    letter-spacing: 0.02em;
+  }
+  .panel p { margin: 0; font-weight: 500; font-size: 15px; }
+
+  .axes {
+    background: var(--paper);
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    box-shadow: 8px 8px 0 var(--ink);
+    padding: 22px 24px;
+    margin-bottom: 28px;
+  }
+  .axes h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 22px;
+    margin: 0 0 6px;
+  }
+  .axes .sub { margin: 0 0 18px; color: var(--muted); font-size: 14px; }
+
+  .axis-row { display: grid; grid-template-columns: 1fr; gap: 6px; padding: 10px 0; border-top: 2px dashed var(--line); }
+  .axis-row:last-child { padding-bottom: 0; }
+  .axis-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .axis-name { font-weight: 700; font-size: 15px; }
+  .axis-val { font-family: var(--font-pixel); font-size: 10px; font-variant-numeric: tabular-nums; }
+  .bar { display: grid; grid-template-columns: repeat(16, 1fr); gap: 3px; }
+  .bar i { display: block; height: 12px; border: 2px solid var(--ink); background: var(--mist); }
+  .bar i.on { background: var(--leaf); }
+  .bar i.top { background: var(--lime); }
+  .axis-note { font-size: 13.5px; color: var(--muted); margin: 0; }
+
+  .cta {
+    background: var(--cream);
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    box-shadow: 8px 8px 0 var(--ink);
+    padding: 24px;
+    display: grid;
+    gap: 14px;
+  }
+  .cta h3 { font-family: var(--font-display); font-weight: 700; font-size: 24px; margin: 0; line-height: 1.15; }
+  .cta p { margin: 0; max-width: 56ch; }
+  .cta .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: var(--lime);
+    font-family: var(--font-pixel);
+    font-size: 9px;
+    padding: 12px 16px;
+    border: 2px solid var(--lime);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 120ms steps(3);
+  }
+  .toast.show { opacity: 1; }
+
+  footer {
+    max-width: 760px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 14px 24px 28px;
+    font-family: var(--font-pixel);
+    font-size: 8px;
+    color: var(--muted-on-dark);
+    line-height: 1.9;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+  }
+  footer a { color: var(--lime); text-decoration: none; }
+
+  @media (max-width: 520px) {
+    .card { padding: 20px 18px 18px; box-shadow: 6px 6px 0 var(--ink); }
+    .topbar, main, footer { padding-left: 16px; padding-right: 16px; }
+    .opt { grid-template-columns: 30px 1fr; gap: 10px; padding: 12px; }
+    .opt .key { width: 30px; height: 30px; font-size: 10px; }
+    .nav { flex-direction: column-reverse; align-items: stretch; }
+    .nav .btn { justify-content: center; }
+    .hint { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; animation: none !important; }
+  }
+</style>
+
+<div class="app">
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span>Управленческая архитектура</div>
+    <div class="counter" id="counter" aria-live="polite"></div>
+  </div>
+
+  <main>
+    <!-- Start screen -->
+    <section class="screen hero" id="screen-start">
+      <div class="tags" aria-hidden="true">
+        <span class="tag tag--lime">Команда</span>
+        <span class="tag tag--pink">Бизнес</span>
+        <span class="tag tag--leaf">Технологии (ИИ)</span>
+      </div>
+      <h1>Вы управляете командой — или система управляет вами?</h1>
+      <p class="lead">Пройдите короткий тест и узнайте, насколько зрелая ваша управленческая архитектура — и где теряется потенциал команды, процессов и технологий.</p>
+      <canvas class="pixel-art" id="pixel-art" width="190" height="60" aria-hidden="true"></canvas>
+      <div class="meta">
+        <span>12 вопросов</span>
+        <span>около 3 минут</span>
+        <span>результат сразу, без регистрации</span>
+      </div>
+      <button class="btn" id="btn-start" type="button">Начать тест <span class="arrow">&gt;&gt;</span></button>
+    </section>
+
+    <!-- Question screen -->
+    <section class="screen" id="screen-quiz" hidden>
+      <div class="card">
+        <div class="progress" id="progress" aria-hidden="true"></div>
+        <div class="q-label"><span id="q-num"></span><span class="axis" id="q-axis"></span></div>
+        <h2 class="q-text" id="q-text"></h2>
+        <ul class="options" id="options"></ul>
+        <div class="nav">
+          <button class="btn btn--ghost" id="btn-back" type="button"><span class="arrow">&lt;&lt;</span> Назад</button>
+          <div class="hint">Клавиши 1–4 или A–D<br>выбирают ответ</div>
+          <button class="btn" id="btn-next" type="button" disabled>Дальше <span class="arrow">&gt;&gt;</span></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Result screen -->
+    <section class="screen result" id="screen-result" hidden>
+      <div class="score-line">
+        <div class="score"><span id="r-score"></span><small>из 48</small></div>
+      </div>
+      <div class="level-tag" id="r-level"></div>
+      <h2 id="r-title"></h2>
+      <p class="desc" id="r-desc"></p>
+
+      <div class="two">
+        <div class="panel panel--lime">
+          <h3>Сильные стороны</h3>
+          <p id="r-strong"></p>
+        </div>
+        <div class="panel panel--paper">
+          <h3>Зоны роста</h3>
+          <p id="r-grow"></p>
+        </div>
+      </div>
+
+      <div class="axes">
+        <h3>Три опоры вашей системы</h3>
+        <p class="sub">Каждая опора — 4 вопроса, максимум 16 баллов. Самая короткая полоса показывает, где теряется потенциал.</p>
+        <div id="axes"></div>
+      </div>
+
+      <div class="cta">
+        <h3>Что дальше</h3>
+        <p>Уровень выше — это не «больше контроля», а другая архитектура: роли, процессы, данные и ИИ, которые работают без вашего ручного участия. На курсе «Системный менеджмент» мы собираем её по шагам.</p>
+        <div class="row">
+          <a class="btn btn--dark" id="cta-course" href="#" target="_blank" rel="noopener">Узнать о курсе <span class="arrow">&gt;&gt;</span></a>
+          <button class="btn btn--ghost" id="btn-copy" type="button">Скопировать результат</button>
+          <button class="btn btn--ghost" id="btn-restart" type="button">Пройти заново</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>Тест «Команда — Бизнес — Технологии (ИИ)»</span>
+    <span>A = 1 · B = 2 · C = 3 · D = 4 балла</span>
+  </footer>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+  // ---------- Settings: change here ----------
+  // Ссылка на курс. UTM-метки позволяют увидеть переходы с теста в аналитике лендинга.
+  var COURSE_URL = "https://setters.education/";
+  var UTM = "utm_source=quiz&utm_medium=kbt_test&utm_campaign=system_management";
+
+  var AXES = { team: "Команда", biz: "Бизнес", tech: "Технологии" };
+
+  var QUESTIONS = [
+    { axis: "team", text: "Как вы определяете свою управленческую роль?", opts: [
+      "Я в основном решаю задачи сам.",
+      "Стараюсь делегировать, но многое держу под контролем.",
+      "У меня есть ясная зона ответственности и стратегия взаимодействия с командой.",
+      "Моя роль — архитектор системы: создаю условия, где команда работает самостоятельно."
+    ]},
+    { axis: "biz", text: "Насколько системно вы видите свою компанию?", opts: [
+      "Часто теряюсь в операционных задачах.",
+      "Вижу отдельные элементы, но не всю картину.",
+      "Иногда удаётся «подняться над системой» и увидеть связи.",
+      "Я регулярно анализирую систему целиком и принимаю решения с позиции целостности."
+    ]},
+    { axis: "tech", text: "Как вы работаете с ИИ и новыми технологиями?", opts: [
+      "Почти не использую — не до этого.",
+      "Пробую отдельные инструменты.",
+      "Есть несколько задач, где ИИ уже помогает.",
+      "ИИ встроен в процессы: анализ, планирование, коммуникацию."
+    ]},
+    { axis: "team", text: "Что является основным источником энергии в вашей команде?", opts: [
+      "Энтузиазм отдельных людей.",
+      "Личный контроль и мотивация «от меня».",
+      "У нас есть доверие и культура обратной связи.",
+      "Энергия строится на ценностях, согласованности и самоуправлении."
+    ]},
+    { axis: "team", text: "Как вы работаете с обратной связью?", opts: [
+      "Даю только когда что-то не так.",
+      "Иногда хвалю или корректирую.",
+      "Есть система 1:1 и регулярные обсуждения.",
+      "У нас культура щадящей обратной связи: честно, с уважением и фокусом на рост."
+    ]},
+    { axis: "tech", text: "Насколько устойчивы ваши процессы?", opts: [
+      "Всё держится на людях.",
+      "Есть процессы, но они часто нарушаются.",
+      "Мы описали ключевые процессы и стараемся следовать им.",
+      "Система работает автономно, с контролем качества и точками автоматизации."
+    ]},
+    { axis: "biz", text: "Используете ли вы данные и метрики для управления?", opts: [
+      "Нет, полагаюсь на интуицию.",
+      "Иногда смотрю отчёты.",
+      "У нас есть базовые метрики по проектам.",
+      "Управляю через метрики и аналитические панели."
+    ]},
+    { axis: "biz", text: "Как реагируете на изменения в бизнес-среде?", opts: [
+      "Сопротивляемся, стараемся сохранить привычное.",
+      "Реагируем по ситуации.",
+      "Пробуем новые подходы, но не всегда системно.",
+      "Работаем с изменениями проактивно: анализируем, моделируем, тестируем."
+    ]},
+    { axis: "tech", text: "Как вы внедряете новые инициативы или технологии?", opts: [
+      "Через сопротивление и ручное управление.",
+      "Объясняю команде и контролирую процесс.",
+      "Внедрение идёт постепенно, с вовлечением ключевых людей.",
+      "Есть процесс change management и коммуникационная стратегия."
+    ]},
+    { axis: "biz", text: "Как вы планируете развитие компании?", opts: [
+      "Планируем «по инерции».",
+      "Ставим цели, но не всегда достигаем.",
+      "Есть стратегия и планы по направлениям.",
+      "Есть сценарные планы и альтернативные стратегии под разные сценарии."
+    ]},
+    { axis: "tech", text: "Как взаимодействуют между собой команда, процессы и технологии?", opts: [
+      "Каждый сам по себе.",
+      "Связи есть, но часто рвутся.",
+      "Большинство процессов согласованы.",
+      "Всё работает как единая экосистема."
+    ]},
+    { axis: "team", text: "Что вы считаете главной силой вашей управленческой системы?", opts: [
+      "Энтузиазм людей.",
+      "Контроль и личная вовлечённость.",
+      "Слаженная работа команды.",
+      "Целостная система: люди, процессы, ИИ и культура согласованности."
+    ]}
+  ];
+
+  var LEVELS = [
+    { min: 12, max: 20, tag: "Уровень 1 из 4", name: "Реактивный менеджмент",
+      desc: "Система пока живёт на вашей энергии: задачи, решения и мотивация замыкаются на вас. Это даёт скорость, но не масштаб — когда вы выпадаете на неделю, работа встаёт.",
+      strong: "Энергия и вовлечённость.", grow: "Нужна структура и ясность ролей." },
+    { min: 21, max: 30, tag: "Уровень 2 из 4", name: "Формирующаяся система",
+      desc: "Процессы и роли уже появились, но держатся на договорённостях, а не на данных. Команда знает, что делать, однако решения по-прежнему проходят через вас.",
+      strong: "Уже есть процессы и понимание.", grow: "Не хватает целостности и данных." },
+    { min: 31, max: 40, tag: "Уровень 3 из 4", name: "Системное управление",
+      desc: "Структура работает: метрики есть, обратная связь регулярна, команда согласована. Следующий шаг — убрать из системы ручной труд и научить её меняться быстрее рынка.",
+      strong: "Есть структура и согласованность.", grow: "Пора внедрять ИИ и развивать гибкость." },
+    { min: 41, max: 48, tag: "Уровень 4 из 4", name: "Интеллектуальная система (ИИ+)",
+      desc: "Данные, автономные процессы и культура согласованности работают как единая экосистема. Ваша задача теперь — масштабировать модель и передавать опыт другим командам.",
+      strong: "Интеграция данных, автономия, лидерство.", grow: "Масштабирование и обмен опытом." }
+  ];
+
+  var AXIS_NOTES = {
+    team: { low: "Команда зависит от вашего присутствия: роли и обратная связь не оформлены в систему.", mid: "Доверие и обратная связь есть, но ещё не стали культурой, которая работает без вас.", high: "Команда работает на ценностях и самоуправлении — это редкая и сильная опора." },
+    biz:  { low: "Компания видна фрагментами: решения принимаются по ситуации и по интуиции.", mid: "Есть цели и базовые метрики, но стратегия ещё не превращена в сценарии.", high: "Вы управляете через данные и сценарии — бизнес-опора зрелая." },
+    tech: { low: "Процессы и технологии живут на людях: сбой одного человека рвёт цепочку.", mid: "Ключевые процессы описаны, ИИ пробуется точечно — есть куда встраивать автоматизацию.", high: "Процессы, ИИ и change management работают как экосистема." }
+  };
+
+  // Аналитика: события уходят в Яндекс Метрику (ym) и/или GA (gtag), если счётчик подключён на странице.
+  function track(name, params) {
+    try {
+      if (window.ym && window.YM_ID) ym(window.YM_ID, "reachGoal", name, params || {});
+      if (window.gtag) gtag("event", name, params || {});
+    } catch (e) {}
+  }
+
+  var LETTERS = ["A", "B", "C", "D"];
+  var answers = new Array(QUESTIONS.length).fill(null);
+  var idx = 0;
+
+  var $ = function (id) { return document.getElementById(id); };
+  var screens = { start: $("screen-start"), quiz: $("screen-quiz"), result: $("screen-result") };
+
+  function show(name) {
+    Object.keys(screens).forEach(function (k) { screens[k].hidden = (k !== name); });
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }
+
+  function renderCounter() {
+    var done = answers.filter(function (a) { return a !== null; }).length;
+    $("counter").innerHTML = screens.quiz.hidden ? "" : "<b>" + pad(idx + 1) + "</b>/" + pad(QUESTIONS.length);
+  }
+
+  function pad(n) { return n < 10 ? "0" + n : "" + n; }
+
+  function renderQuestion() {
+    var q = QUESTIONS[idx];
+    var prog = $("progress");
+    prog.innerHTML = "";
+    QUESTIONS.forEach(function (_, i) {
+      var cell = document.createElement("i");
+      if (i < idx || (answers[i] !== null && i !== idx)) cell.className = "done";
+      if (i === idx) cell.className = "now";
+      prog.appendChild(cell);
+    });
+
+    $("q-num").textContent = "Вопрос " + pad(idx + 1) + " / " + pad(QUESTIONS.length);
+    $("q-axis").textContent = AXES[q.axis];
+    $("q-text").textContent = q.text;
+
+    var list = $("options");
+    list.innerHTML = "";
+    q.opts.forEach(function (text, i) {
+      var li = document.createElement("li");
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "opt" + (answers[idx] === i ? " selected" : "");
+      btn.setAttribute("aria-pressed", answers[idx] === i ? "true" : "false");
+      btn.innerHTML = '<span class="key">' + LETTERS[i] + "</span><span>" + text + "</span>";
+      btn.addEventListener("click", function () { choose(i); });
+      li.appendChild(btn);
+      list.appendChild(li);
+    });
+
+    $("btn-back").hidden = idx === 0;
+    $("btn-next").disabled = answers[idx] === null;
+    $("btn-next").innerHTML = (idx === QUESTIONS.length - 1 ? "Показать результат" : "Дальше") + ' <span class="arrow">&gt;&gt;</span>';
+    renderCounter();
+  }
+
+  var advanceTimer = null;
+  function choose(i) {
+    answers[idx] = i;
+    var buttons = $("options").querySelectorAll(".opt");
+    buttons.forEach(function (b, j) {
+      b.classList.toggle("selected", j === i);
+      b.setAttribute("aria-pressed", j === i ? "true" : "false");
+    });
+    $("btn-next").disabled = false;
+    clearTimeout(advanceTimer);
+    advanceTimer = setTimeout(next, 320);
+  }
+
+  function next() {
+    clearTimeout(advanceTimer);
+    if (answers[idx] === null) return;
+    if (idx < QUESTIONS.length - 1) { idx++; renderQuestion(); }
+    else { renderResult(); }
+  }
+
+  function back() {
+    clearTimeout(advanceTimer);
+    if (idx > 0) { idx--; renderQuestion(); }
+  }
+
+  function score() { return answers.reduce(function (s, a) { return s + (a === null ? 0 : a + 1); }, 0); }
+
+  function axisScore(axis) {
+    var s = 0;
+    QUESTIONS.forEach(function (q, i) { if (q.axis === axis && answers[i] !== null) s += answers[i] + 1; });
+    return s;
+  }
+
+  var lastResult = null;
+
+  function renderResult() {
+    var total = score();
+    var level = LEVELS.filter(function (l) { return total >= l.min && total <= l.max; })[0] || LEVELS[0];
+    lastResult = { total: total, level: level };
+
+    $("r-score").textContent = total;
+    $("r-level").textContent = level.tag;
+    $("r-title").textContent = level.name;
+    $("r-desc").textContent = level.desc;
+    $("r-strong").textContent = level.strong;
+    $("r-grow").textContent = level.grow;
+
+    var wrap = $("axes");
+    wrap.innerHTML = "";
+    var scores = { team: axisScore("team"), biz: axisScore("biz"), tech: axisScore("tech") };
+    var minAxis = Object.keys(scores).sort(function (a, b) { return scores[a] - scores[b]; })[0];
+
+    Object.keys(AXES).forEach(function (axis) {
+      var v = scores[axis];
+      var row = document.createElement("div");
+      row.className = "axis-row";
+      var bars = "";
+      for (var i = 0; i < 16; i++) {
+        bars += "<i class=\"" + (i < v ? (i === v - 1 ? "on top" : "on") : "") + "\"></i>";
+      }
+      var band = v <= 7 ? "low" : (v <= 12 ? "mid" : "high");
+      row.innerHTML =
+        '<div class="axis-head"><span class="axis-name">' + AXES[axis] + (axis === minAxis ? " — точка роста" : "") + '</span>' +
+        '<span class="axis-val">' + pad(v) + "/16</span></div>" +
+        '<div class="bar" role="img" aria-label="' + AXES[axis] + ": " + v + ' из 16">' + bars + "</div>" +
+        '<p class="axis-note">' + AXIS_NOTES[axis][band] + "</p>";
+      wrap.appendChild(row);
+    });
+
+    var sep = COURSE_URL.indexOf("?") === -1 ? "?" : "&";
+    $("cta-course").href = COURSE_URL + sep + UTM + "&utm_content=level" + (LEVELS.indexOf(level) + 1);
+
+    show("result");
+    renderCounter();
+    track("quiz_finish", { level: LEVELS.indexOf(level) + 1, score: total });
+    try { localStorage.setItem("kbt_last", JSON.stringify({ total: total, answers: answers, at: Date.now() })); } catch (e) {}
+  }
+
+  function restart() {
+    answers = new Array(QUESTIONS.length).fill(null);
+    idx = 0;
+    show("quiz");
+    renderQuestion();
+  }
+
+  function toast(msg) {
+    var t = $("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(t._h);
+    t._h = setTimeout(function () { t.classList.remove("show"); }, 1800);
+  }
+
+  function copyResult() {
+    if (!lastResult) return;
+    var text = "Тест «Команда — Бизнес — Технологии (ИИ)»\n" +
+      "Мой результат: " + lastResult.total + " из 48 — " + lastResult.level.name + "\n" +
+      "Команда " + axisScore("team") + "/16 · Бизнес " + axisScore("biz") + "/16 · Технологии " + axisScore("tech") + "/16\n" +
+      "Пройти тест: " + location.href.split("#")[0];
+    var done = function () { toast("Скопировано"); };
+    var fail = function () { toast("Не удалось скопировать"); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, fail);
+    } else {
+      var ta = document.createElement("textarea");
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); done(); } catch (e) { fail(); }
+      document.body.removeChild(ta);
+    }
+  }
+
+  // Pixel-art decoration in the hero: blocky "К Б Т" glyphs in brand colours.
+  function drawPixelArt() {
+    var c = $("pixel-art");
+    if (!c || !c.getContext) return;
+    var ctx = c.getContext("2d");
+    var glyphs = {
+      K: ["10001","10010","10100","11000","10100","10010","10001"],
+      B: ["11111","10000","10000","11110","10001","10001","11110"],
+      T: ["11111","00100","00100","00100","00100","00100","00100"]
+    };
+    var colors = ["#EFF6AC", "#FFA6BF", "#6FAF79"];
+    var px = 6, x0 = 4, y0 = 6;
+    ctx.clearRect(0, 0, c.width, c.height);
+    ["K", "B", "T"].forEach(function (g, gi) {
+      var rows = glyphs[g];
+      var ox = x0 + gi * (5 * px + px * 2 + 4);
+      // hard shadow
+      rows.forEach(function (r, y) {
+        for (var x = 0; x < 5; x++) if (r[x] === "1") {
+          ctx.fillStyle = "#1E1E1E";
+          ctx.fillRect(ox + x * px + px * 0.5, y0 + y * px + px * 0.5, px, px);
+        }
+      });
+      rows.forEach(function (r, y) {
+        for (var x = 0; x < 5; x++) if (r[x] === "1") {
+          ctx.fillStyle = colors[gi];
+          ctx.fillRect(ox + x * px, y0 + y * px, px, px);
+        }
+      });
+    });
+    // separators as dashes
+    ctx.fillStyle = "#A9BDB6";
+    [0, 1].forEach(function (i) {
+      var sx = x0 + 5 * px + i * (5 * px + px * 2 + 4) + 5;
+      ctx.fillRect(sx, y0 + 3 * px, px * 1.2, px * 0.6);
+    });
+  }
+
+  // ---------- Events ----------
+  $("btn-start").addEventListener("click", function () { track("quiz_start"); show("quiz"); renderQuestion(); });
+  $("cta-course").addEventListener("click", function () { track("cta_click", { level: lastResult ? LEVELS.indexOf(lastResult.level) + 1 : 0 }); });
+  $("btn-next").addEventListener("click", next);
+  $("btn-back").addEventListener("click", back);
+  $("btn-restart").addEventListener("click", restart);
+  $("btn-copy").addEventListener("click", copyResult);
+
+  document.addEventListener("keydown", function (e) {
+    if (screens.quiz.hidden) return;
+    var k = e.key.toLowerCase();
+    var map = { "1": 0, "2": 1, "3": 2, "4": 3, "a": 0, "b": 1, "c": 2, "d": 3, "ф": 0, "и": 1, "с": 2, "в": 3 };
+    if (map.hasOwnProperty(k)) { choose(map[k]); e.preventDefault(); }
+    else if (k === "enter" || k === "arrowright") { next(); }
+    else if (k === "arrowleft") { back(); }
+  });
+
+  drawPixelArt();
+  renderCounter();
+</script>
+
+</head>
+<body></body>
+</html>
