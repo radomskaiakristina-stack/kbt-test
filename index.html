@@ -11,7 +11,7 @@
 <meta name="description" content="Тест для руководителей: насколько зрелая ваша управленческая архитектура — команда, бизнес, технологии и ИИ. 12 вопросов, 3 минуты.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Pixelify+Sans:wght@500;700&family=Press+Start+2P&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Press+Start+2P&display=swap">
 <style>
   :root {
     --forest: #102E2A;
@@ -29,7 +29,8 @@
     --muted-on-dark: #A9BDB6;
     --shadow: 4px 4px 0 var(--ink);
     --font-body: "Montserrat", "Helvetica Neue", Arial, sans-serif;
-    --font-display: "Pixelify Sans", "Montserrat", Arial, sans-serif;
+    --font-display: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+    --font-label: "Montserrat", "Helvetica Neue", Arial, sans-serif;
     --font-pixel: "Press Start 2P", "Courier New", monospace;
   }
 
@@ -66,8 +67,7 @@
   }
 
   .brand {
-    font-family: var(--font-pixel);
-    font-size: 10px;
+    font-family: var(--font-label); font-weight: 700; font-size: 12px; letter-spacing: 0.08em;
     color: var(--lime);
     letter-spacing: 0.04em;
     text-transform: uppercase;
@@ -85,7 +85,7 @@
 
   .counter {
     font-family: var(--font-pixel);
-    font-size: 10px;
+    font-size: 12px;
     color: var(--muted-on-dark);
     font-variant-numeric: tabular-nums;
   }
@@ -108,8 +108,7 @@
   .tags { display: flex; flex-wrap: wrap; gap: 10px 8px; margin-bottom: 26px; }
 
   .tag {
-    font-family: var(--font-pixel);
-    font-size: 9px;
+    font-family: var(--font-label); font-weight: 700; font-size: 12px; letter-spacing: 0.08em;
     line-height: 1;
     text-transform: uppercase;
     padding: 10px 12px;
@@ -123,9 +122,10 @@
 
   h1 {
     font-family: var(--font-display);
-    font-weight: 700;
-    font-size: clamp(30px, 6vw, 48px);
-    line-height: 1.08;
+    font-weight: 800;
+    font-size: clamp(28px, 5.4vw, 42px);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
     margin: 0 0 18px;
     text-wrap: balance;
     max-width: 16ch;
@@ -153,8 +153,8 @@
     flex-wrap: wrap;
     gap: 14px 28px;
     margin: 22px 0 28px;
-    font-family: var(--font-pixel);
-    font-size: 9px;
+    font-family: var(--font-label); font-weight: 700; font-size: 12px; letter-spacing: 0.08em;
+    text-transform: uppercase;
     color: var(--muted-on-dark);
     line-height: 1.8;
   }
@@ -213,8 +213,7 @@
   .progress i.now { background: var(--lime); }
 
   .q-label {
-    font-family: var(--font-pixel);
-    font-size: 9px;
+    font-family: var(--font-label); font-weight: 700; font-size: 12px; letter-spacing: 0.08em;
     color: var(--leaf-deep);
     text-transform: uppercase;
     margin-bottom: 12px;
@@ -226,8 +225,8 @@
 
   h2.q-text {
     font-family: var(--font-display);
-    font-weight: 700;
-    font-size: clamp(22px, 4vw, 30px);
+    font-weight: 800;
+    font-size: clamp(21px, 3.6vw, 27px);
     line-height: 1.15;
     margin: 0 0 22px;
     text-wrap: balance;
@@ -278,7 +277,7 @@
     padding-top: 18px;
     border-top: 2px dashed var(--line);
   }
-  .hint { font-family: var(--font-pixel); font-size: 8px; color: var(--muted); line-height: 1.8; }
+  .hint { font-family: var(--font-label); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; font-size: 11px; color: var(--muted); line-height: 1.7; text-align: center; }
 
   /* ---------- Result ---------- */
   .result { color: var(--paper); padding-top: 12px; }
@@ -300,8 +299,7 @@
 
   .level-tag {
     display: inline-block;
-    font-family: var(--font-pixel);
-    font-size: 9px;
+    font-family: var(--font-label); font-weight: 700; font-size: 12px; letter-spacing: 0.08em;
     text-transform: uppercase;
     background: var(--pink);
     color: var(--ink);
@@ -314,8 +312,8 @@
 
   .result h2 {
     font-family: var(--font-display);
-    font-weight: 700;
-    font-size: clamp(28px, 5.5vw, 42px);
+    font-weight: 800;
+    font-size: clamp(26px, 5vw, 38px);
     line-height: 1.1;
     margin: 0 0 12px;
     text-wrap: balance;
@@ -325,9 +323,18 @@
 
   .two {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
     gap: 14px;
-    margin-bottom: 26px;
+    margin-bottom: 22px;
+  }
+  .panel--leaf { background: var(--leaf); }
+  .growth {
+    border-left: 6px solid var(--lime);
+    padding: 4px 0 4px 18px;
+    margin: 0 0 28px;
+    max-width: 62ch;
+    color: var(--paper);
+    font-weight: 500;
   }
   .panel {
     border: 2px solid var(--ink);
@@ -338,13 +345,11 @@
   .panel--lime { background: var(--lime); }
   .panel--paper { background: var(--paper); }
   .panel h3 {
-    font-family: var(--font-pixel);
-    font-size: 9px;
+    font-family: var(--font-label); font-weight: 700; font-size: 12px; letter-spacing: 0.08em;
     text-transform: uppercase;
     margin: 0 0 10px;
-    letter-spacing: 0.02em;
   }
-  .panel p { margin: 0; font-weight: 500; font-size: 15px; }
+  .panel p { margin: 0; font-weight: 500; font-size: 14.5px; line-height: 1.5; }
 
   .axes {
     background: var(--paper);
@@ -356,17 +361,18 @@
   }
   .axes h3 {
     font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 22px;
+    font-weight: 800;
+    font-size: 20px;
     margin: 0 0 6px;
   }
   .axes .sub { margin: 0 0 18px; color: var(--muted); font-size: 14px; }
+  .axis-tag { font-family: var(--font-label); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; font-size: 11px; background: var(--pink); border: 2px solid var(--ink); padding: 3px 6px; margin-left: 8px; }
 
   .axis-row { display: grid; grid-template-columns: 1fr; gap: 6px; padding: 10px 0; border-top: 2px dashed var(--line); }
   .axis-row:last-child { padding-bottom: 0; }
   .axis-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
   .axis-name { font-weight: 700; font-size: 15px; }
-  .axis-val { font-family: var(--font-pixel); font-size: 10px; font-variant-numeric: tabular-nums; }
+  .axis-val { font-family: var(--font-pixel); font-size: 12px; font-variant-numeric: tabular-nums; }
   .bar { display: grid; grid-template-columns: repeat(16, 1fr); gap: 3px; }
   .bar i { display: block; height: 12px; border: 2px solid var(--ink); background: var(--mist); }
   .bar i.on { background: var(--leaf); }
@@ -382,7 +388,7 @@
     display: grid;
     gap: 14px;
   }
-  .cta h3 { font-family: var(--font-display); font-weight: 700; font-size: 24px; margin: 0; line-height: 1.15; }
+  .cta h3 { font-family: var(--font-display); font-weight: 800; font-size: 22px; margin: 0; line-height: 1.15; }
   .cta p { margin: 0; max-width: 56ch; }
   .cta .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 
@@ -393,8 +399,8 @@
     transform: translateX(-50%);
     background: var(--ink);
     color: var(--lime);
-    font-family: var(--font-pixel);
-    font-size: 9px;
+    font-family: var(--font-label); font-weight: 700; font-size: 12px; letter-spacing: 0.08em;
+    text-transform: uppercase;
     padding: 12px 16px;
     border: 2px solid var(--lime);
     pointer-events: none;
@@ -408,8 +414,9 @@
     width: 100%;
     margin: 0 auto;
     padding: 14px 24px 28px;
-    font-family: var(--font-pixel);
-    font-size: 8px;
+    font-family: var(--font-label); font-weight: 700; font-size: 12px; letter-spacing: 0.08em;
+    font-size: 11px;
+    text-transform: uppercase;
     color: var(--muted-on-dark);
     line-height: 1.9;
     display: flex;
@@ -485,24 +492,30 @@
 
       <div class="two">
         <div class="panel panel--lime">
-          <h3>Сильные стороны</h3>
-          <p id="r-strong"></p>
+          <h3>Команда</h3>
+          <p id="r-team"></p>
         </div>
         <div class="panel panel--paper">
-          <h3>Зоны роста</h3>
-          <p id="r-grow"></p>
+          <h3>Процессы</h3>
+          <p id="r-process"></p>
+        </div>
+        <div class="panel panel--leaf">
+          <h3>Технологии</h3>
+          <p id="r-tech"></p>
         </div>
       </div>
 
+      <p class="growth" id="r-growth"></p>
+
       <div class="axes">
-        <h3>Три опоры вашей системы</h3>
-        <p class="sub">Каждая опора — 4 вопроса, максимум 16 баллов. Самая короткая полоса показывает, где теряется потенциал.</p>
+        <h3>Ваши баллы по трём опорам</h3>
+        <p class="sub">Каждая опора — 4 вопроса, максимум 16 баллов. Самая короткая полоса показывает, где потенциал теряется сильнее всего.</p>
         <div id="axes"></div>
       </div>
 
       <div class="cta">
         <h3>Что дальше</h3>
-        <p>Уровень выше — это не «больше контроля», а другая архитектура: роли, процессы, данные и ИИ, которые работают без вашего ручного участия. На курсе «Системный менеджмент» мы собираем её по шагам.</p>
+        <p id="r-course"></p>
         <div class="row">
           <a class="btn btn--dark" id="cta-course" href="#" target="_blank" rel="noopener">Узнать о курсе <span class="arrow">&gt;&gt;</span></a>
           <button class="btn btn--ghost" id="btn-copy" type="button">Скопировать результат</button>
@@ -604,25 +617,35 @@
   ];
 
   var LEVELS = [
-    { min: 12, max: 20, tag: "Уровень 1 из 4", name: "Реактивный менеджмент",
-      desc: "Система пока живёт на вашей энергии: задачи, решения и мотивация замыкаются на вас. Это даёт скорость, но не масштаб — когда вы выпадаете на неделю, работа встаёт.",
-      strong: "Энергия и вовлечённость.", grow: "Нужна структура и ясность ролей." },
-    { min: 21, max: 30, tag: "Уровень 2 из 4", name: "Формирующаяся система",
-      desc: "Процессы и роли уже появились, но держатся на договорённостях, а не на данных. Команда знает, что делать, однако решения по-прежнему проходят через вас.",
-      strong: "Уже есть процессы и понимание.", grow: "Не хватает целостности и данных." },
-    { min: 31, max: 40, tag: "Уровень 3 из 4", name: "Системное управление",
-      desc: "Структура работает: метрики есть, обратная связь регулярна, команда согласована. Следующий шаг — убрать из системы ручной труд и научить её меняться быстрее рынка.",
-      strong: "Есть структура и согласованность.", grow: "Пора внедрять ИИ и развивать гибкость." },
-    { min: 41, max: 48, tag: "Уровень 4 из 4", name: "Интеллектуальная система (ИИ+)",
-      desc: "Данные, автономные процессы и культура согласованности работают как единая экосистема. Ваша задача теперь — масштабировать модель и передавать опыт другим командам.",
-      strong: "Интеграция данных, автономия, лидерство.", grow: "Масштабирование и обмен опытом." }
+    { min: 12, max: 20, tag: "12–20 баллов · уровень 1 из 4", name: "Реактивный менеджмент",
+      desc: "Сейчас управление во многом держится на вашей личной энергии и постоянном включении.",
+      team: "Роли и зоны ответственности не всегда очевидны, поэтому многие вопросы возвращаются к руководителю.",
+      process: "Работа строится скорее вокруг срочных задач, чем вокруг устойчивой системы — приходится часто переключаться и гасить пожары.",
+      tech: "Данные, аналитика и ИИ пока почти не встроены в управление и не снимают с команды рутину.",
+      growth: "Главная точка роста — собрать основу системы: распределить ответственность, описать ключевые процессы и определить, на какие показатели опираться в решениях.",
+      course: "На курсе «Системный менеджмент» вы соберёте этот управленческий контур и постепенно переведёте команду из ручного режима в более предсказуемый." },
+    { min: 21, max: 30, tag: "21–30 баллов · уровень 2 из 4", name: "Формирующаяся система",
+      desc: "Основа уже есть: отдельные процессы работают, роли постепенно закрепляются, решения всё чаще опираются не только на опыт руководителя. Но пока эти элементы существуют скорее по отдельности, чем как единая система.",
+      team: "Ответственность распределена, хотя часть вопросов всё ещё требует вашего личного участия.",
+      process: "Основные правила и ритуалы уже появились, но в нестандартных ситуациях команда может возвращаться к ручному управлению.",
+      tech: "Аналитика и ИИ используются точечно — в отдельных задачах, а не во всём управленческом цикле.",
+      growth: "Следующий шаг — связать людей, процессы и данные так, чтобы система помогала не только решать текущие задачи, но и заранее видеть отклонения.",
+      course: "На «Системном менеджменте» вы сможете собрать эти элементы в единый управленческий контур и понять, где автоматизация и ИИ действительно дадут эффект." },
+    { min: 31, max: 40, tag: "31–40 баллов · уровень 3 из 4", name: "Системное управление",
+      desc: "У вас уже работает управленческая система: роли понятны, основные процессы выстроены, а решения опираются на данные. Теперь главный резерв находится не в наведении порядка, а в связях между элементами системы.",
+      team: "Может работать достаточно автономно без постоянного контроля руководителя.",
+      process: "Формализованы и воспроизводимы, но их ещё можно быстрее адаптировать к изменениям.",
+      tech: "Аналитика уже помогает принимать решения, а ИИ используется в отдельных сценариях — следующий шаг заключается в его системной интеграции.",
+      growth: "Ваш управленческий контур почти собран. Главный резерв — в связях между людьми, процессами и технологиями.",
+      course: "На курсе «Системный менеджмент» вы сможете усилить связи между людьми, процессами и технологиями, убрать лишние ручные действия и сделать систему более гибкой и масштабируемой." },
+    { min: 41, max: 48, tag: "41–48 баллов · уровень 4 из 4", name: "Интеллектуальная система",
+      desc: "У вас зрелая управленческая система: команда автономна, процессы связаны с данными, а технологии становятся полноценной частью управления.",
+      team: "Понимает цели и принимает значительную часть решений самостоятельно.",
+      process: "Прозрачны, измеримы и позволяют быстро замечать отклонения.",
+      tech: "Аналитика и ИИ встроены в работу и помогают автоматизировать рутину, находить закономерности и принимать решения быстрее.",
+      growth: "На этом уровне задача уже не столько в том, чтобы достроить систему, сколько в том, чтобы развивать её: масштабировать удачные практики, искать новые сценарии применения ИИ и передавать управленческую экспертизу другим командам.",
+      course: "На «Системном менеджменте» вы сможете проверить свою систему на прочность, найти неочевидные точки роста и сопоставить свой подход с практиками других руководителей." }
   ];
-
-  var AXIS_NOTES = {
-    team: { low: "Команда зависит от вашего присутствия: роли и обратная связь не оформлены в систему.", mid: "Доверие и обратная связь есть, но ещё не стали культурой, которая работает без вас.", high: "Команда работает на ценностях и самоуправлении — это редкая и сильная опора." },
-    biz:  { low: "Компания видна фрагментами: решения принимаются по ситуации и по интуиции.", mid: "Есть цели и базовые метрики, но стратегия ещё не превращена в сценарии.", high: "Вы управляете через данные и сценарии — бизнес-опора зрелая." },
-    tech: { low: "Процессы и технологии живут на людях: сбой одного человека рвёт цепочку.", mid: "Ключевые процессы описаны, ИИ пробуется точечно — есть куда встраивать автоматизацию.", high: "Процессы, ИИ и change management работают как экосистема." }
-  };
 
   // Аналитика: события уходят в Яндекс Метрику (ym) и/или GA (gtag), если счётчик подключён на странице.
   function track(name, params) {
@@ -730,8 +753,11 @@
     $("r-level").textContent = level.tag;
     $("r-title").textContent = level.name;
     $("r-desc").textContent = level.desc;
-    $("r-strong").textContent = level.strong;
-    $("r-grow").textContent = level.grow;
+    $("r-team").textContent = level.team;
+    $("r-process").textContent = level.process;
+    $("r-tech").textContent = level.tech;
+    $("r-growth").textContent = level.growth;
+    $("r-course").textContent = level.course;
 
     var wrap = $("axes");
     wrap.innerHTML = "";
@@ -746,12 +772,10 @@
       for (var i = 0; i < 16; i++) {
         bars += "<i class=\"" + (i < v ? (i === v - 1 ? "on top" : "on") : "") + "\"></i>";
       }
-      var band = v <= 7 ? "low" : (v <= 12 ? "mid" : "high");
       row.innerHTML =
-        '<div class="axis-head"><span class="axis-name">' + AXES[axis] + (axis === minAxis ? " — точка роста" : "") + '</span>' +
+        '<div class="axis-head"><span class="axis-name">' + AXES[axis] + (axis === minAxis ? '<span class="axis-tag">точка роста</span>' : "") + '</span>' +
         '<span class="axis-val">' + pad(v) + "/16</span></div>" +
-        '<div class="bar" role="img" aria-label="' + AXES[axis] + ": " + v + ' из 16">' + bars + "</div>" +
-        '<p class="axis-note">' + AXIS_NOTES[axis][band] + "</p>";
+        '<div class="bar" role="img" aria-label="' + AXES[axis] + ": " + v + ' из 16">' + bars + "</div>";
       wrap.appendChild(row);
     });
 
