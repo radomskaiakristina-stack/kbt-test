@@ -426,6 +426,38 @@
   }
   footer a { color: var(--lime); text-decoration: none; }
 
+  /* ---------- Pixel art & animation ---------- */
+  @keyframes stepIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @keyframes popIn { 0% { transform: scale(0.5); } 100% { transform: none; } }
+  @keyframes blinkSel { 0%, 100% { background: var(--lime); } 50% { background: var(--paper); } }
+  @keyframes wiggle { 0% { transform: rotate(-1.5deg); } 100% { transform: rotate(1.5deg); } }
+  .card.enter { animation: stepIn 260ms steps(4) both; }
+  .opt.enter { animation: stepIn 220ms steps(3) both; }
+  .opt.selected.blink { animation: blinkSel 150ms steps(2) 2; }
+  .progress i.now { animation: popIn 180ms steps(3); }
+  .result .score-line, .result .level-tag, .result h2, .result .desc, .result .two, .result .growth, .result .axes, .result .cta { animation: stepIn 300ms steps(4) both; }
+  .result .level-tag { animation-delay: 120ms; }
+  .result h2 { animation-delay: 200ms; }
+  .result .desc { animation-delay: 280ms; }
+  .result .two { animation-delay: 380ms; }
+  .result .growth { animation-delay: 480ms; }
+  .result .axes { animation-delay: 560ms; }
+  .result .cta { animation-delay: 680ms; }
+  .hero-art { display: block; width: 100%; max-width: 440px; height: auto; margin: 12px 0 24px; image-rendering: pixelated; }
+  .score-line { align-items: center; gap: 20px; }
+  .badge {
+    width: 80px; height: 80px;
+    image-rendering: pixelated;
+    border: 2px solid var(--ink);
+    background: var(--paper);
+    box-shadow: var(--shadow);
+    flex: none;
+  }
+  .axis-icon { width: 24px; height: 24px; image-rendering: pixelated; vertical-align: middle; margin-right: 8px; }
+  .q-label .axis { display: inline-flex; align-items: center; }
+  .panel canvas.pic { width: 48px; height: 48px; image-rendering: pixelated; display: block; margin-bottom: 10px; }
+  .confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; image-rendering: pixelated; }
+
   @media (max-width: 520px) {
     .card { padding: 20px 18px 18px; box-shadow: 6px 6px 0 var(--ink); }
     .topbar, main, footer { padding-left: 16px; padding-right: 16px; }
@@ -457,7 +489,7 @@
       </div>
       <h1>Вы управляете командой — или система управляет вами?</h1>
       <p class="lead">Пройдите короткий тест и узнайте, насколько зрелая ваша управленческая архитектура — и где теряется потенциал команды, процессов и технологий.</p>
-      <canvas class="pixel-art" id="pixel-art" width="190" height="60" aria-hidden="true"></canvas>
+      <canvas class="hero-art" id="pixel-art" width="300" height="84" aria-hidden="true"></canvas>
       <div class="meta">
         <span>12 вопросов</span>
         <span>около 3 минут</span>
@@ -484,6 +516,7 @@
     <!-- Result screen -->
     <section class="screen result" id="screen-result" hidden>
       <div class="score-line">
+        <canvas class="badge" id="r-badge" width="80" height="80" aria-hidden="true"></canvas>
         <div class="score"><span id="r-score"></span><small>из 48</small></div>
       </div>
       <div class="level-tag" id="r-level"></div>
@@ -492,14 +525,17 @@
 
       <div class="two">
         <div class="panel panel--lime">
+          <canvas class="pic" data-icon="team" width="12" height="12" aria-hidden="true"></canvas>
           <h3>Команда</h3>
           <p id="r-team"></p>
         </div>
         <div class="panel panel--paper">
+          <canvas class="pic" data-icon="gear" width="16" height="16" aria-hidden="true"></canvas>
           <h3>Процессы</h3>
           <p id="r-process"></p>
         </div>
         <div class="panel panel--leaf">
+          <canvas class="pic" data-icon="chip" width="12" height="12" aria-hidden="true"></canvas>
           <h3>Технологии</h3>
           <p id="r-tech"></p>
         </div>
@@ -686,7 +722,10 @@
     });
 
     $("q-num").textContent = "Вопрос " + pad(idx + 1) + " / " + pad(QUESTIONS.length);
-    $("q-axis").textContent = AXES[q.axis];
+    var ax = $("q-axis"); ax.innerHTML = '<canvas class="axis-icon" width="12" height="12" aria-hidden="true"></canvas>' + AXES[q.axis];
+    PX.icon(ax.firstChild, q.axis, true);
+    var card = document.querySelector("#screen-quiz .card");
+    card.classList.remove("enter"); void card.offsetWidth; card.classList.add("enter");
     $("q-text").textContent = q.text;
 
     var list = $("options");
@@ -695,7 +734,8 @@
       var li = document.createElement("li");
       var btn = document.createElement("button");
       btn.type = "button";
-      btn.className = "opt" + (answers[idx] === i ? " selected" : "");
+      btn.className = "opt enter" + (answers[idx] === i ? " selected" : "");
+      btn.style.animationDelay = (60 + i * 70) + "ms";
       btn.setAttribute("aria-pressed", answers[idx] === i ? "true" : "false");
       btn.innerHTML = '<span class="key">' + LETTERS[i] + "</span><span>" + text + "</span>";
       btn.addEventListener("click", function () { choose(i); });
@@ -715,11 +755,12 @@
     var buttons = $("options").querySelectorAll(".opt");
     buttons.forEach(function (b, j) {
       b.classList.toggle("selected", j === i);
+      b.classList.toggle("blink", j === i);
       b.setAttribute("aria-pressed", j === i ? "true" : "false");
     });
     $("btn-next").disabled = false;
     clearTimeout(advanceTimer);
-    advanceTimer = setTimeout(next, 320);
+    advanceTimer = setTimeout(next, 420);
   }
 
   function next() {
@@ -749,7 +790,11 @@
     var level = LEVELS.filter(function (l) { return total >= l.min && total <= l.max; })[0] || LEVELS[0];
     lastResult = { total: total, level: level };
 
-    $("r-score").textContent = total;
+    var levelIndex = LEVELS.indexOf(level);
+    PX.badge($("r-badge"), levelIndex);
+    var scoreEl = $("r-score");
+    if (PX.reduce) scoreEl.textContent = total;
+    else { scoreEl.textContent = "0"; var n = 0; var ct = setInterval(function () { n++; scoreEl.textContent = n; if (n >= total) clearInterval(ct); }, 28); }
     $("r-level").textContent = level.tag;
     $("r-title").textContent = level.name;
     $("r-desc").textContent = level.desc;
@@ -770,7 +815,7 @@
       row.className = "axis-row";
       var bars = "";
       for (var i = 0; i < 16; i++) {
-        bars += "<i class=\"" + (i < v ? (i === v - 1 ? "on top" : "on") : "") + "\"></i>";
+        bars += "<i data-fill=\"" + (i < v ? (i === v - 1 ? "on top" : "on") : "") + "\"></i>";
       }
       row.innerHTML =
         '<div class="axis-head"><span class="axis-name">' + AXES[axis] + (axis === minAxis ? '<span class="axis-tag">точка роста</span>' : "") + '</span>' +
@@ -778,12 +823,20 @@
         '<div class="bar" role="img" aria-label="' + AXES[axis] + ": " + v + ' из 16">' + bars + "</div>";
       wrap.appendChild(row);
     });
+    var cells = wrap.querySelectorAll(".bar i[data-fill]");
+    cells.forEach(function (cell) {
+      var i = Array.prototype.indexOf.call(cell.parentNode.children, cell);
+      var apply = function () { cell.className = cell.getAttribute("data-fill"); };
+      if (PX.reduce) apply(); else setTimeout(apply, 700 + i * 45);
+    });
+    document.querySelectorAll(".panel canvas.pic").forEach(function (cv) { PX.icon(cv, cv.getAttribute("data-icon"), true); });
 
     var sep = COURSE_URL.indexOf("?") === -1 ? "?" : "&";
     $("cta-course").href = COURSE_URL + sep + UTM + "&utm_content=level" + (LEVELS.indexOf(level) + 1);
 
     show("result");
     renderCounter();
+    setTimeout(PX.confetti, 350);
     track("quiz_finish", { level: LEVELS.indexOf(level) + 1, score: total });
     try { localStorage.setItem("kbt_last", JSON.stringify({ total: total, answers: answers, at: Date.now() })); } catch (e) {}
   }
@@ -794,6 +847,9 @@
     show("quiz");
     renderQuestion();
   }
+  // Hero animation resumes when the start screen is shown again
+  var _show = show;
+  show = function (name) { _show(name); if (name === "start") PX.hero($("pixel-art")); };
 
   function toast(msg) {
     var t = $("toast");
@@ -821,43 +877,173 @@
     }
   }
 
-  // Pixel-art decoration in the hero: blocky "К Б Т" glyphs in brand colours.
-  function drawPixelArt() {
-    var c = $("pixel-art");
-    if (!c || !c.getContext) return;
-    var ctx = c.getContext("2d");
-    var glyphs = {
+  // ---------- Pixel art engine ----------
+  var PX = (function () {
+    var reduce = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    var C = { lime: "#EFF6AC", pink: "#FFA6BF", leaf: "#6FAF79", ink: "#1E1E1E", paper: "#FFFFFF", forest: "#102E2A", mist: "#D6DBD9", deep: "#4E8F5A" };
+
+    // Draw a bitmap: rows of chars, pal maps char -> colour. Shadow = 1px ink offset.
+    function bitmap(ctx, rows, pal, x, y, px, shadow) {
+      if (shadow) rows.forEach(function (r, j) { for (var i = 0; i < r.length; i++) if (pal[r[i]]) { ctx.fillStyle = C.ink; ctx.fillRect(x + i * px + px, y + j * px + px, px, px); } });
+      rows.forEach(function (r, j) { for (var i = 0; i < r.length; i++) if (pal[r[i]]) { ctx.fillStyle = pal[r[i]]; ctx.fillRect(x + i * px, y + j * px, px, px); } });
+    }
+    function pixels(rows, pal, x, y, px) {
+      var out = [];
+      rows.forEach(function (r, j) { for (var i = 0; i < r.length; i++) if (pal[r[i]]) out.push({ x: x + i * px, y: y + j * px, c: pal[r[i]] }); });
+      return out;
+    }
+
+    var GLYPHS = {
       K: ["10001","10010","10100","11000","10100","10010","10001"],
       B: ["11111","10000","10000","11110","10001","10001","11110"],
       T: ["11111","00100","00100","00100","00100","00100","00100"]
     };
-    var colors = ["#EFF6AC", "#FFA6BF", "#6FAF79"];
-    var px = 6, x0 = 4, y0 = 6;
-    ctx.clearRect(0, 0, c.width, c.height);
-    ["K", "B", "T"].forEach(function (g, gi) {
-      var rows = glyphs[g];
-      var ox = x0 + gi * (5 * px + px * 2 + 4);
-      // hard shadow
-      rows.forEach(function (r, y) {
-        for (var x = 0; x < 5; x++) if (r[x] === "1") {
-          ctx.fillStyle = "#1E1E1E";
-          ctx.fillRect(ox + x * px + px * 0.5, y0 + y * px + px * 0.5, px, px);
-        }
+    var FLAME = [
+      ["...o....","...oo...","..ooo...","..oooo..",".ooyoo..",".oyyyoo.",".oyyyoo.",".ooyyoo.","..oooo..","...oo..."],
+      ["....o...","...oo...","...ooo..","..oooo..","..ooyoo.",".ooyyoo.",".oyyyoo.",".ooyyoo.","..oooo..","...oo..."]
+    ];
+    var CURSOR = ["#.......","##......","#o#.....","#oo#....","#ooo#...","#oooo#..","#ooooo#.","#ooo####","#o#o#...","##.#o#..","#...##.."];
+    var SPARK = [["..#..","..#..","#####","..#..","..#.."], [".....","..#..",".###.","..#..","....."]];
+
+    // Procedural gear on a 16x16 grid. phase rotates the teeth.
+    function gear(ctx, x, y, px, phase, col) {
+      var cx = 7.5, cy = 7.5;
+      for (var j = 0; j < 16; j++) for (var i = 0; i < 16; i++) {
+        var dx = i - cx, dy = j - cy, r = Math.sqrt(dx * dx + dy * dy), a = Math.atan2(dy, dx);
+        var on = r <= 4.6 || (r <= 7.2 && Math.cos(6 * a + phase) > 0.2);
+        if (r < 1.8) on = false;
+        if (on) { ctx.fillStyle = C.ink; ctx.fillRect(x + i * px + px, y + j * px + px, px, px); }
+      }
+      for (var j2 = 0; j2 < 16; j2++) for (var i2 = 0; i2 < 16; i2++) {
+        var dx2 = i2 - cx, dy2 = j2 - cy, r2 = Math.sqrt(dx2 * dx2 + dy2 * dy2), a2 = Math.atan2(dy2, dx2);
+        var on2 = r2 <= 4.6 || (r2 <= 7.2 && Math.cos(6 * a2 + phase) > 0.2);
+        if (r2 < 1.8) on2 = false;
+        if (on2) { ctx.fillStyle = col || C.leaf; ctx.fillRect(x + i2 * px, y + j2 * px, px, px); }
+      }
+    }
+    // Chip 12x12 with blinking sparkles
+    function chip(ctx, x, y, px, frame) {
+      var rows = [
+        "..#..#..#...", ".gggggggg...", "#gyyyyyygg#.", "#gy....yg#..", "#gy.oo.yg#..", "#gy.oo.yg#..",
+        "#gy....yg#..", "#gyyyyyyg#..", ".gggggggg...", "..#..#..#..."
+      ];
+      bitmap(ctx, rows, { "#": C.ink, "g": C.leaf, "y": C.lime, "o": C.ink }, x, y, px, false);
+      if (frame % 2 === 0) bitmap(ctx, SPARK[0], { "#": C.pink }, x + 9 * px, y - 2 * px, px, false);
+      else bitmap(ctx, SPARK[1], { "#": C.pink }, x + 9 * px, y - 2 * px, px, false);
+    }
+    // Two people 12x12
+    function team(ctx, x, y, px) {
+      var rows = ["............", "..oo....pp..", "..oo....pp..", "............", ".oooo..pppp.", ".oooo..pppp.", ".oooo..pppp.", ".oooo..pppp.", "..o.o..p.p..", "..o.o..p.p..", "............", "............"];
+      bitmap(ctx, rows, { o: C.lime, p: C.pink }, x, y, px, true);
+    }
+    // Bar chart 12x12
+    function bars(ctx, x, y, px, frame) {
+      var h = [4, 7, 10]; if (frame % 2) h = [4, 8, 11];
+      var cols = [C.pink, C.lime, C.leaf];
+      for (var b = 0; b < 3; b++) {
+        var bx = x + (1 + b * 4) * px, by = y + (12 - h[b]) * px;
+        ctx.fillStyle = C.ink; ctx.fillRect(bx + px, by + px, 3 * px, h[b] * px);
+        ctx.fillStyle = cols[b]; ctx.fillRect(bx, by, 3 * px, h[b] * px);
+      }
+    }
+    // Stacking blocks 12x12
+    function blocks(ctx, x, y, px, frame) {
+      var list = [[1, 8, C.leaf], [5, 8, C.pink], [3, 4, C.lime]];
+      if (frame % 2) list.push([7, 4, C.leaf]);
+      list.forEach(function (bl) {
+        ctx.fillStyle = C.ink; ctx.fillRect(x + (bl[0] + 1) * px, y + (bl[1] + 1) * px, 4 * px, 4 * px);
+        ctx.fillStyle = bl[2]; ctx.fillRect(x + bl[0] * px, y + bl[1] * px, 4 * px, 4 * px);
+        ctx.fillStyle = C.ink; ctx.fillRect(x + bl[0] * px, y + bl[1] * px, 4 * px, 4 * px);
+        ctx.fillStyle = bl[2]; ctx.fillRect(x + bl[0] * px + 1, y + bl[1] * px + 1, 4 * px - 2, 4 * px - 2);
       });
-      rows.forEach(function (r, y) {
-        for (var x = 0; x < 5; x++) if (r[x] === "1") {
-          ctx.fillStyle = colors[gi];
-          ctx.fillRect(ox + x * px, y0 + y * px, px, px);
-        }
+    }
+    function flame(ctx, x, y, px, frame) { bitmap(ctx, FLAME[frame % 2], { o: C.pink, y: C.lime }, x, y, px, true); }
+    function cursor(ctx, x, y, px) { bitmap(ctx, CURSOR, { "#": C.ink, "o": C.paper }, x, y, px, false); }
+
+    // Small icon renderers by name (used on question labels and result panels)
+    var ICONS = {
+      team: function (ctx, f) { ctx.clearRect(0, 0, 12, 12); team(ctx, 0, 0, 1); },
+      biz: function (ctx, f) { ctx.clearRect(0, 0, 12, 12); bars(ctx, 0, 0, 1, f); },
+      tech: function (ctx, f) { ctx.clearRect(0, 0, 12, 12); chip(ctx, 0, 1, 1, f); },
+      chip: function (ctx, f) { ctx.clearRect(0, 0, 12, 12); chip(ctx, 0, 1, 1, f); },
+      gear: function (ctx, f) { ctx.clearRect(0, 0, 16, 16); gear(ctx, -1, -1, 1, f * Math.PI / 6); }
+    };
+    function icon(canvas, name, animate) {
+      var ctx = canvas.getContext("2d"); var f = 0;
+      ICONS[name](ctx, 0);
+      if (animate && !reduce) {
+        clearInterval(canvas._t);
+        canvas._t = setInterval(function () { if (!document.body.contains(canvas)) return clearInterval(canvas._t); ICONS[name](ctx, ++f); }, 420);
+      }
+    }
+
+    // Level badges: 80x80 canvas, 16x16 grid at 4px
+    var BADGES = [
+      function (ctx, f) { flame(ctx, 16, 12, 6, f); },
+      function (ctx, f) { blocks(ctx, 8, 6, 5, f); },
+      function (ctx, f) { gear(ctx, 8, 8, 4, f * Math.PI / 6, C.leaf); },
+      function (ctx, f) { chip(ctx, 12, 16, 5, f); }
+    ];
+    function badge(canvas, level) {
+      var ctx = canvas.getContext("2d"); var f = 0;
+      function draw() { ctx.clearRect(0, 0, 80, 80); BADGES[level](ctx, f); }
+      draw();
+      clearInterval(canvas._t);
+      if (!reduce) canvas._t = setInterval(function () { if (canvas.closest("section").hidden) return; f++; draw(); }, level === 2 ? 220 : 380);
+    }
+
+    // Hero: letters assemble pixel by pixel, gear spins, cursor bobs, sparks blink.
+    var heroRaf = null;
+    function hero(canvas) {
+      var ctx = canvas.getContext("2d"), px = 6, y0 = 10;
+      var pal = [C.lime, C.pink, C.leaf], list = [];
+      ["K", "B", "T"].forEach(function (g, gi) {
+        var ox = 4 + gi * (5 * px + 14);
+        list = list.concat(pixels(GLYPHS[g], { "1": pal[gi] }, ox, y0, px));
       });
-    });
-    // separators as dashes
-    ctx.fillStyle = "#A9BDB6";
-    [0, 1].forEach(function (i) {
-      var sx = x0 + 5 * px + i * (5 * px + px * 2 + 4) + 5;
-      ctx.fillRect(sx, y0 + 3 * px, px * 1.2, px * 0.6);
-    });
-  }
+      // shuffle reveal order deterministically
+      var order = list.map(function (p, i) { return { p: p, k: (i * 7919) % 1009 }; }).sort(function (a, b) { return a.k - b.k; }).map(function (o) { return o.p; });
+      var start = null;
+      function frame(t) {
+        if (start === null) start = t;
+        var el = t - start;
+        var n = reduce ? order.length : Math.min(order.length, Math.floor(el / 900 * order.length));
+        var step = Math.floor(el / 260);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // separators
+        ctx.fillStyle = "#A9BDB6";
+        [0, 1].forEach(function (i) { ctx.fillRect(4 + 5 * px + i * (5 * px + 14) + 4, y0 + 3 * px + 1, 7, 4); });
+        for (var i = 0; i < n; i++) { ctx.fillStyle = C.ink; ctx.fillRect(order[i].x + 3, order[i].y + 3, px, px); }
+        for (var j = 0; j < n; j++) { ctx.fillStyle = order[j].c; ctx.fillRect(order[j].x, order[j].y, px, px); }
+        gear(ctx, 176, 8, 4, step * Math.PI / 6, C.leaf);
+        cursor(ctx, 252, 26 + (step % 2 ? 0 : 3), 3);
+        bitmap(ctx, SPARK[step % 2], { "#": C.lime }, 236, 6, 3, false);
+        bitmap(ctx, SPARK[(step + 1) % 2], { "#": C.pink }, 150, 54, 3, false);
+        if (!reduce && !canvas.closest("section").hidden) heroRaf = requestAnimationFrame(frame);
+      }
+      if (heroRaf) cancelAnimationFrame(heroRaf);
+      heroRaf = requestAnimationFrame(frame);
+    }
+
+    // Pixel confetti burst (one-off)
+    function confetti() {
+      if (reduce) return;
+      var c = document.createElement("canvas"); c.className = "confetti";
+      c.width = window.innerWidth; c.height = window.innerHeight; document.body.appendChild(c);
+      var ctx = c.getContext("2d"), cols = [C.lime, C.pink, C.leaf, C.paper], parts = [];
+      for (var i = 0; i < 90; i++) parts.push({ x: Math.random() * c.width, y: -20 - Math.random() * c.height * 0.4, vx: (Math.random() - 0.5) * 2.4, vy: 2 + Math.random() * 4, s: 6 + Math.floor(Math.random() * 3) * 3, c: cols[i % cols.length] });
+      var t0 = null;
+      function tick(t) {
+        if (t0 === null) t0 = t;
+        ctx.clearRect(0, 0, c.width, c.height);
+        parts.forEach(function (p) { p.x += p.vx; p.y += p.vy; p.vy += 0.08; ctx.fillStyle = p.c; ctx.fillRect(Math.round(p.x / 4) * 4, Math.round(p.y / 4) * 4, p.s, p.s); });
+        if (t - t0 < 2200) requestAnimationFrame(tick); else c.remove();
+      }
+      requestAnimationFrame(tick);
+    }
+
+    return { reduce: reduce, icon: icon, badge: badge, hero: hero, confetti: confetti };
+  })();
 
   // ---------- Events ----------
   $("btn-start").addEventListener("click", function () { track("quiz_start"); show("quiz"); renderQuestion(); });
@@ -876,7 +1062,7 @@
     else if (k === "arrowleft") { back(); }
   });
 
-  drawPixelArt();
+  PX.hero($("pixel-art"));
   renderCounter();
 </script>
 
