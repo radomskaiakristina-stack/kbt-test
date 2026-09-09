@@ -443,7 +443,7 @@
   .result .growth { animation-delay: 480ms; }
   .result .axes { animation-delay: 560ms; }
   .result .cta { animation-delay: 680ms; }
-  .hero-art { display: block; width: 100%; max-width: 440px; height: auto; margin: 12px 0 24px; image-rendering: pixelated; }
+  .hero-art { display: block; width: 100%; max-width: 220px; height: auto; margin: 12px 0 24px; image-rendering: pixelated; }
   .score-line { align-items: center; gap: 20px; }
   .badge {
     width: 80px; height: 80px;
@@ -489,7 +489,7 @@
       </div>
       <h1>Вы управляете командой — или система управляет вами?</h1>
       <p class="lead">Пройдите короткий тест и узнайте, насколько зрелая ваша управленческая архитектура — и где теряется потенциал команды, процессов и технологий.</p>
-      <canvas class="hero-art" id="pixel-art" width="300" height="84" aria-hidden="true"></canvas>
+      <canvas class="hero-art" id="pixel-art" width="150" height="84" aria-hidden="true"></canvas>
       <div class="meta">
         <span>12 вопросов</span>
         <span>около 3 минут</span>
@@ -893,11 +893,6 @@
       return out;
     }
 
-    var GLYPHS = {
-      K: ["10001","10010","10100","11000","10100","10010","10001"],
-      B: ["11111","10000","10000","11110","10001","10001","11110"],
-      T: ["11111","00100","00100","00100","00100","00100","00100"]
-    };
     var FLAME = [
       ["...o....","...oo...","..ooo...","..oooo..",".ooyoo..",".oyyyoo.",".oyyyoo.",".ooyyoo.","..oooo..","...oo..."],
       ["....o...","...oo...","...ooo..","..oooo..","..ooyoo.",".ooyyoo.",".oyyyoo.",".ooyyoo.","..oooo..","...oo..."]
@@ -992,33 +987,19 @@
       if (!reduce) canvas._t = setInterval(function () { if (canvas.closest("section").hidden) return; f++; draw(); }, level === 2 ? 220 : 380);
     }
 
-    // Hero: letters assemble pixel by pixel, gear spins, cursor bobs, sparks blink.
+    // Hero: gear spins, cursor bobs, sparks blink.
     var heroRaf = null;
     function hero(canvas) {
-      var ctx = canvas.getContext("2d"), px = 6, y0 = 10;
-      var pal = [C.lime, C.pink, C.leaf], list = [];
-      ["K", "B", "T"].forEach(function (g, gi) {
-        var ox = 4 + gi * (5 * px + 14);
-        list = list.concat(pixels(GLYPHS[g], { "1": pal[gi] }, ox, y0, px));
-      });
-      // shuffle reveal order deterministically
-      var order = list.map(function (p, i) { return { p: p, k: (i * 7919) % 1009 }; }).sort(function (a, b) { return a.k - b.k; }).map(function (o) { return o.p; });
+      var ctx = canvas.getContext("2d");
       var start = null;
       function frame(t) {
         if (start === null) start = t;
-        var el = t - start;
-        var n = reduce ? order.length : Math.min(order.length, Math.floor(el / 900 * order.length));
-        var step = Math.floor(el / 260);
+        var step = Math.floor((t - start) / 260);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        // separators
-        ctx.fillStyle = "#A9BDB6";
-        [0, 1].forEach(function (i) { ctx.fillRect(4 + 5 * px + i * (5 * px + 14) + 4, y0 + 3 * px + 1, 7, 4); });
-        for (var i = 0; i < n; i++) { ctx.fillStyle = C.ink; ctx.fillRect(order[i].x + 3, order[i].y + 3, px, px); }
-        for (var j = 0; j < n; j++) { ctx.fillStyle = order[j].c; ctx.fillRect(order[j].x, order[j].y, px, px); }
-        gear(ctx, 176, 8, 4, step * Math.PI / 6, C.leaf);
-        cursor(ctx, 252, 26 + (step % 2 ? 0 : 3), 3);
-        bitmap(ctx, SPARK[step % 2], { "#": C.lime }, 236, 6, 3, false);
-        bitmap(ctx, SPARK[(step + 1) % 2], { "#": C.pink }, 150, 54, 3, false);
+        gear(ctx, 10, 8, 4, step * Math.PI / 6, C.leaf);
+        cursor(ctx, 96, 26 + (step % 2 ? 0 : 3), 3);
+        bitmap(ctx, SPARK[step % 2], { "#": C.lime }, 80, 6, 3, false);
+        bitmap(ctx, SPARK[(step + 1) % 2], { "#": C.pink }, 126, 58, 3, false);
         if (!reduce && !canvas.closest("section").hidden) heroRaf = requestAnimationFrame(frame);
       }
       if (heroRaf) cancelAnimationFrame(heroRaf);
@@ -1065,7 +1046,4 @@
   PX.hero($("pixel-art"));
   renderCounter();
 </script>
-
-</head>
-<body></body>
-</html>
+\n</head>\n<body></body>\n</html>\n
