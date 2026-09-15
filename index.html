@@ -439,11 +439,13 @@
   .result .level-tag { animation-delay: 120ms; }
   .result h2 { animation-delay: 200ms; }
   .result .desc { animation-delay: 280ms; }
-  .result .two { animation-delay: 380ms; }
+  .result .scene { animation: stepIn 300ms steps(4) both; animation-delay: 330ms; }
+  .result .two { animation-delay: 420ms; }
+  .scene { display: block; width: 100%; max-width: 450px; height: auto; margin: -6px 0 24px; image-rendering: pixelated; }
   .result .growth { animation-delay: 480ms; }
   .result .axes { animation-delay: 560ms; }
   .result .cta { animation-delay: 680ms; }
-  .hero-art { display: block; width: 100%; max-width: 220px; height: auto; margin: 12px 0 24px; image-rendering: pixelated; }
+  .hero-art { display: block; width: 100%; max-width: 390px; height: auto; margin: 12px 0 24px; image-rendering: pixelated; }
   .score-line { align-items: center; gap: 20px; }
   .badge {
     width: 80px; height: 80px;
@@ -489,7 +491,7 @@
       </div>
       <h1>Вы управляете командой — или система управляет вами?</h1>
       <p class="lead">Пройдите короткий тест и узнайте, насколько зрелая ваша управленческая архитектура — и где теряется потенциал команды, процессов и технологий.</p>
-      <canvas class="hero-art" id="pixel-art" width="150" height="84" aria-hidden="true"></canvas>
+      <canvas class="hero-art" id="pixel-art" width="260" height="76" aria-hidden="true"></canvas>
       <div class="meta">
         <span>12 вопросов</span>
         <span>около 3 минут</span>
@@ -507,7 +509,7 @@
         <ul class="options" id="options"></ul>
         <div class="nav">
           <button class="btn btn--ghost" id="btn-back" type="button"><span class="arrow">&lt;&lt;</span> Назад</button>
-          <div class="hint">Клавиши 1–4 или A–D<br>выбирают ответ</div>
+          <div class="hint">1–4 или A–D — выбрать ответ<br>Enter — дальше</div>
           <button class="btn" id="btn-next" type="button" disabled>Дальше <span class="arrow">&gt;&gt;</span></button>
         </div>
       </div>
@@ -522,6 +524,7 @@
       <div class="level-tag" id="r-level"></div>
       <h2 id="r-title"></h2>
       <p class="desc" id="r-desc"></p>
+      <canvas class="scene" id="r-scene" width="300" height="76" aria-hidden="true"></canvas>
 
       <div class="two">
         <div class="panel panel--lime">
@@ -759,8 +762,7 @@
       b.setAttribute("aria-pressed", j === i ? "true" : "false");
     });
     $("btn-next").disabled = false;
-    clearTimeout(advanceTimer);
-    advanceTimer = setTimeout(next, 420);
+    $("btn-next").focus({ preventScroll: true });
   }
 
   function next() {
@@ -792,6 +794,7 @@
 
     var levelIndex = LEVELS.indexOf(level);
     PX.badge($("r-badge"), levelIndex);
+    PX.scene($("r-scene"), levelIndex);
     var scoreEl = $("r-score");
     if (PX.reduce) scoreEl.textContent = total;
     else { scoreEl.textContent = "0"; var n = 0; var ct = setInterval(function () { n++; scoreEl.textContent = n; if (n >= total) clearInterval(ct); }, 28); }
@@ -926,8 +929,8 @@
       if (frame % 2 === 0) bitmap(ctx, SPARK[0], { "#": C.pink }, x + 9 * px, y - 2 * px, px, false);
       else bitmap(ctx, SPARK[1], { "#": C.pink }, x + 9 * px, y - 2 * px, px, false);
     }
-    // Two people 12x12
-    function team(ctx, x, y, px) {
+    // Two people 12x12 (question label icon)
+    function teamIcon(ctx, x, y, px) {
       var rows = ["............", "..oo....pp..", "..oo....pp..", "............", ".oooo..pppp.", ".oooo..pppp.", ".oooo..pppp.", ".oooo..pppp.", "..o.o..p.p..", "..o.o..p.p..", "............", "............"];
       bitmap(ctx, rows, { o: C.lime, p: C.pink }, x, y, px, true);
     }
@@ -957,7 +960,7 @@
 
     // Small icon renderers by name (used on question labels and result panels)
     var ICONS = {
-      team: function (ctx, f) { ctx.clearRect(0, 0, 12, 12); team(ctx, 0, 0, 1); },
+      team: function (ctx, f) { ctx.clearRect(0, 0, 12, 12); teamIcon(ctx, 0, 0, 1); },
       biz: function (ctx, f) { ctx.clearRect(0, 0, 12, 12); bars(ctx, 0, 0, 1, f); },
       tech: function (ctx, f) { ctx.clearRect(0, 0, 12, 12); chip(ctx, 0, 1, 1, f); },
       chip: function (ctx, f) { ctx.clearRect(0, 0, 12, 12); chip(ctx, 0, 1, 1, f); },
@@ -987,19 +990,79 @@
       if (!reduce) canvas._t = setInterval(function () { if (canvas.closest("section").hidden) return; f++; draw(); }, level === 2 ? 220 : 380);
     }
 
-    // Hero: gear spins, cursor bobs, sparks blink.
+    // ---- Pixel people ----
+    // 12x19 grid. h = hair, s = skin, e = eye, t = shirt, p = trousers, k = shoes.
+    var BODY = [
+      "...hhhhhh...", "..hhhhhhhh..", "..hhssssshh.", "..hsssssssh.", "..hseeseess.", "..sssssssss.",
+      "...sssssss..", "....sssss...", "...ttttttt..", "..ttttttttt.", ".sttttttttts", ".sttttttttts",
+      ".sttttttttts", "..ttttttttt.", "...ppppppp..", "...ppp.ppp..", "...ppp.ppp..", "...ppp.ppp..", "...kkk.kkk.."
+    ];
+    // Right arm raised (waving)
+    var BODY_WAVE = BODY.slice();
+    BODY_WAVE[6] = "...sssssss.s"; BODY_WAVE[7] = "....sssss..s"; BODY_WAVE[8] = "...ttttttt.s";
+    BODY_WAVE[9] = "..tttttttts."; BODY_WAVE[10] = ".stttttttt.."; BODY_WAVE[11] = ".stttttttt.."; BODY_WAVE[12] = ".stttttttt..";
+    var SKINS = ["#F3CFAF", "#D9A278", "#A8714C", "#6F4A31"];
+    var HAIRS = ["#1E1E1E", "#5A3B2A", "#E9C46A", "#B5533C", "#FFA6BF"];
+    var SHIRTS = [C.lime, C.pink, C.leaf, C.paper, "#8FD0FF"];
+    var PANTS = [C.forest, C.ink, "#3C4A55"];
+
+    // Deterministic variety by seed index
+    function personStyle(i) {
+      return { skin: SKINS[i % SKINS.length], hair: HAIRS[(i * 3 + 1) % HAIRS.length], shirt: SHIRTS[(i * 2) % SHIRTS.length], pants: PANTS[i % PANTS.length] };
+    }
+    // frame drives blink (closed eyes on some frames), bob and wave.
+    function person(ctx, x, y, px, st, frame, wave) {
+      var rows = (wave && frame % 2) ? BODY_WAVE : BODY;
+      var blink = (frame + st.seed) % 7 === 0;
+      var pal = { h: st.hair, s: st.skin, e: blink ? st.skin : C.ink, t: st.shirt, p: st.pants, k: C.ink };
+      var bob = (frame + st.seed) % 2 ? 0 : px;
+      bitmap(ctx, rows, pal, x, y + bob, px, true);
+    }
+    function team(ctx, x, y, px, n, frame) {
+      for (var i = 0; i < n; i++) {
+        var st = personStyle(i); st.seed = i;
+        person(ctx, x + i * 15 * px, y, px, st, frame, i === n - 1);
+      }
+    }
+
+    // Result scenes: the team grows with the level, the level object sits beside it.
+    var SCENES = [
+      function (ctx, f) { // 1: one person, fires everywhere
+        var st = personStyle(0); st.seed = 0; person(ctx, 60, 8, 3, st, f, false);
+        flame(ctx, 8, 30, 3, f); flame(ctx, 120, 24, 3, f + 1); flame(ctx, 170, 36, 3, f);
+        bitmap(ctx, SPARK[f % 2], { "#": C.pink }, 150, 8, 3, false);
+      },
+      function (ctx, f) { // 2: two people building blocks
+        team(ctx, 12, 8, 3, 2, f); blocks(ctx, 120, 10, 4, f);
+      },
+      function (ctx, f) { // 3: three people around a gear
+        team(ctx, 12, 8, 3, 3, f); gear(ctx, 170, 6, 4, f * Math.PI / 6, C.leaf);
+      },
+      function (ctx, f) { // 4: four people plus chip
+        team(ctx, 8, 8, 3, 4, f); chip(ctx, 200, 14, 4, f); bitmap(ctx, SPARK[(f + 1) % 2], { "#": C.lime }, 260, 40, 3, false);
+      }
+    ];
+    function scene(canvas, level) {
+      var ctx = canvas.getContext("2d"); var f = 0;
+      function draw() { ctx.clearRect(0, 0, canvas.width, canvas.height); SCENES[level](ctx, f); }
+      draw();
+      clearInterval(canvas._t);
+      if (!reduce) canvas._t = setInterval(function () { if (canvas.closest("section").hidden) return; f++; draw(); }, 400);
+    }
+
+    // Hero: the team stands by a spinning gear, the last person waves.
     var heroRaf = null;
     function hero(canvas) {
       var ctx = canvas.getContext("2d");
       var start = null;
       function frame(t) {
         if (start === null) start = t;
-        var step = Math.floor((t - start) / 260);
+        var step = Math.floor((t - start) / 400);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        gear(ctx, 10, 8, 4, step * Math.PI / 6, C.leaf);
-        cursor(ctx, 96, 26 + (step % 2 ? 0 : 3), 3);
-        bitmap(ctx, SPARK[step % 2], { "#": C.lime }, 80, 6, 3, false);
-        bitmap(ctx, SPARK[(step + 1) % 2], { "#": C.pink }, 126, 58, 3, false);
+        team(ctx, 6, 8, 3, 4, step);
+        gear(ctx, 192, 4, 4, step * Math.PI / 6, C.leaf);
+        bitmap(ctx, SPARK[step % 2], { "#": C.lime }, 244, 12, 3, false);
+        bitmap(ctx, SPARK[(step + 1) % 2], { "#": C.pink }, 170, 56, 3, false);
         if (!reduce && !canvas.closest("section").hidden) heroRaf = requestAnimationFrame(frame);
       }
       if (heroRaf) cancelAnimationFrame(heroRaf);
@@ -1023,7 +1086,7 @@
       requestAnimationFrame(tick);
     }
 
-    return { reduce: reduce, icon: icon, badge: badge, hero: hero, confetti: confetti };
+    return { reduce: reduce, icon: icon, badge: badge, scene: scene, hero: hero, confetti: confetti };
   })();
 
   // ---------- Events ----------
