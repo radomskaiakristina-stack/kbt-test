@@ -1,0 +1,773 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DANI: работа с неопределённостью</title>
+<meta name="description" content="Русская адаптация d.school Ambiguity Navigation Instrument (DANI): 20 утверждений и три результата — NA Attitude, NA Actions и NA Total Score.">
+<!-- === СЧЁТЧИК ===
+     Вставьте сюда код Яндекс Метрики (и добавьте  window.YM_ID = ВАШ_НОМЕР; )
+     или Google Analytics. События: quiz_start, quiz_finish (attitude, actions, total), copy_result. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap">
+<style>
+  :root {
+    --night: #03061A;
+    --navy: #0B1C33;
+    --pine: #04170F;
+    --text: #F4F2FF;
+    --soft: #D5D7EA;
+    --muted: #9AA0BE;
+    --line: rgba(255,255,255,0.14);
+    --line-strong: rgba(255,255,255,0.32);
+    --glass: rgba(255,255,255,0.045);
+    --lav: #B9B4FF;
+    --yellow: #FFD66B;
+    --cream: #FFF6D8;
+    --orange: #FF8A3D;
+    --coral: #F2684A;
+    --mint: #93F5A4;
+    --sky: #5BC4EE;
+    --font: "Manrope", "Helvetica Neue", Arial, sans-serif;
+    --ease: cubic-bezier(.2,.7,.2,1);
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    background: linear-gradient(125deg, var(--navy) 0%, var(--night) 48%, var(--pine) 100%) fixed;
+    background-color: var(--night);
+    overflow-x: hidden;
+  }
+  [hidden] { display: none !important; }
+  button { font-family: inherit; }
+
+  /* ---------- Ambient light ---------- */
+  .ambient { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .ambient i {
+    position: absolute; border-radius: 50%; filter: blur(90px); opacity: .35;
+    animation: drift 26s var(--ease) infinite alternate;
+  }
+  .ambient i:nth-child(1) { width: 46vw; height: 46vw; left: -14vw; top: -18vw; background: var(--lav); opacity: .18; }
+  .ambient i:nth-child(2) { width: 38vw; height: 38vw; right: -12vw; bottom: -14vw; background: var(--orange); opacity: .14; animation-duration: 32s; }
+  .ambient i:nth-child(3) { width: 26vw; height: 26vw; right: 18vw; top: 30vh; background: var(--mint); opacity: .07; animation-duration: 38s; }
+  @keyframes drift { from { transform: translate(0,0) scale(1); } to { transform: translate(4vw, 3vh) scale(1.12); } }
+
+  .app { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; }
+
+  .topbar {
+    width: 100%; max-width: 880px; margin: 0 auto;
+    padding: 22px 24px 8px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    font-size: 13px; color: var(--soft); letter-spacing: .01em;
+  }
+  .brand { display: inline-flex; align-items: center; gap: 10px; }
+  .brand svg { width: 16px; height: 16px; filter: drop-shadow(0 0 6px rgba(185,180,255,.9)); }
+  .counter { font-variant-numeric: tabular-nums; color: var(--muted); }
+  .counter b { color: var(--text); font-weight: 600; }
+
+  main { flex: 1; width: 100%; max-width: 880px; margin: 0 auto; padding: 12px 24px 48px; }
+
+  /* ---------- Visual frames from the moodboard ---------- */
+  .frame {
+    position: relative; overflow: hidden;
+    border-radius: 4px;
+    background: linear-gradient(110deg, #0C1D35 0%, #071225 55%, #03170E 100%);
+    isolation: isolate;
+  }
+  .frame--night { background: #01031A; }
+
+  /* Comet: a star with a widening fan of light */
+  .beam {
+    position: absolute; inset: 0; z-index: 0;
+    background: linear-gradient(200deg, #FFFFFF 0%, var(--cream) 14%, var(--yellow) 34%, #F3C76E 46%, var(--lav) 64%, rgba(185,180,255,0) 92%);
+    clip-path: polygon(11% 86%, 24% 72%, 36% 52%, 45% 30%, 52% 10%, 56% 0%, 100% 0%, 100% 74%, 82% 71%, 62% 72%, 42% 76%, 24% 82%);
+    transform-origin: 11% 86%;
+    animation: beamIn 1.6s var(--ease) both, beamBreath 7s ease-in-out 1.6s infinite alternate;
+  }
+  .beam-wrap { position: absolute; inset: 0; z-index: 0; filter: blur(20px); }
+  .beam-wrap--core { filter: blur(5px); opacity: .85;
+    -webkit-mask-image: radial-gradient(38% 46% at 11% 86%, #000 30%, transparent 100%);
+            mask-image: radial-gradient(38% 46% at 11% 86%, #000 30%, transparent 100%); }
+  .beam::after {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(60% 50% at 82% 30%, rgba(255,255,255,.75), rgba(255,255,255,0) 70%);
+  }
+  @keyframes beamIn { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
+  @keyframes beamBreath { from { opacity: .92; } to { opacity: 1; transform: scale(1.03); } }
+  .star {
+    position: absolute; z-index: 1; width: 30px; height: 30px;
+    left: calc(11% - 15px); top: calc(86% - 15px);
+    filter: drop-shadow(0 0 8px rgba(185,180,255,.95)) drop-shadow(0 0 18px rgba(185,180,255,.6));
+    animation: twinkle 3.4s ease-in-out infinite;
+  }
+  @keyframes twinkle { 0%,100% { transform: rotate(-8deg) scale(1); } 50% { transform: rotate(4deg) scale(1.12); } }
+
+  /* Orb: soft gradient inside, edge only partly blurred */
+  .orb {
+    position: absolute; z-index: 0;
+    left: -2%; right: -2%; top: -88%; height: 165%;
+    border-radius: 50%; overflow: hidden;
+    filter: blur(5px);
+    box-shadow: 0 10px 50px rgba(255,255,255,.08);
+  }
+  .orb i { position: absolute; border-radius: 50%; filter: blur(46px); transition: background 1.2s var(--ease); }
+  .orb .o1 { inset: 0; filter: none; }
+  .orb .o2 { width: 55%; height: 55%; left: -6%; top: 28%; animation: swirl 14s ease-in-out infinite alternate; }
+  .orb .o3 { width: 38%; height: 40%; right: 2%; top: 46%; animation: swirl 11s ease-in-out infinite alternate-reverse; }
+  .orb .o4 { width: 70%; height: 30%; left: 10%; bottom: 0; filter: blur(30px); }
+  @keyframes swirl { from { transform: translate(0,0); } to { transform: translate(6%, 4%) scale(1.08); } }
+
+  .orb[data-palette="fire"] .o1 { background: radial-gradient(120% 70% at 50% 100%, var(--mint) 0 14%, #F08A5D 30%, var(--coral) 60%, var(--coral)); }
+  .orb[data-palette="fire"] .o2 { background: var(--coral); }
+  .orb[data-palette="fire"] .o3 { background: var(--cream); }
+  .orb[data-palette="fire"] .o4 { background: rgba(147,245,164,.0); }
+
+  .orb[data-palette="sky"] .o1 { background: radial-gradient(120% 70% at 50% 100%, var(--orange) 0 18%, #F07A5C 30%, var(--sky) 52%, #6BA9DB); }
+  .orb[data-palette="sky"] .o2 { background: var(--sky); }
+  .orb[data-palette="sky"] .o3 { background: #C4FFD0; }
+  .orb[data-palette="sky"] .o4 { background: rgba(255,138,61,.35); }
+
+  .orb[data-palette="sun"] .o1 { background: radial-gradient(120% 70% at 50% 100%, var(--lav) 0 14%, #FFD27A 30%, #FFB347 55%, #E0A8A8); }
+  .orb[data-palette="sun"] .o2 { background: #D9A9C0; }
+  .orb[data-palette="sun"] .o3 { background: var(--cream); }
+  .orb[data-palette="sun"] .o4 { background: rgba(255,200,60,.5); }
+
+  .orb[data-palette="dusk"] .o1 { background: radial-gradient(120% 70% at 50% 100%, var(--lav) 0 16%, #8C88E8 34%, #4C5FB0 60%, #3B4C93); }
+  .orb[data-palette="dusk"] .o2 { background: #6E6AD8; }
+  .orb[data-palette="dusk"] .o3 { background: var(--lav); }
+  .orb[data-palette="dusk"] .o4 { background: rgba(185,180,255,.4); }
+
+  /* Leader-line annotation */
+  .note {
+    position: absolute; z-index: 2;
+    right: 7%; bottom: 7%;
+    font-size: clamp(14px, 2.1vw, 19px); line-height: 1.12; font-weight: 500; color: var(--text);
+    padding-left: 0;
+  }
+  .note::before {
+    content: ""; position: absolute; right: 100%; bottom: 72%;
+    width: clamp(48px, 9vw, 92px); height: 1px; background: rgba(255,255,255,.5);
+    transform-origin: right center; transform: rotate(40deg);
+    margin-right: 6px;
+  }
+
+  /* ---------- Start ---------- */
+  .hero-frame { aspect-ratio: 16 / 9; margin: 6px 0 34px; }
+  .hero-frame .title-in {
+    position: absolute; z-index: 2; left: 6%; top: 9%; max-width: 46%;
+    font-size: 13px; color: var(--soft); line-height: 1.35;
+  }
+  h1 {
+    font-weight: 400; font-size: clamp(32px, 5.6vw, 52px); line-height: 1.06; letter-spacing: -0.025em;
+    margin: 0 0 20px; text-wrap: balance; max-width: 18ch;
+  }
+  h1 span { color: var(--yellow); }
+  .lead { font-size: 18px; color: var(--soft); max-width: 60ch; margin: 0 0 14px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 10px; margin: 26px 0 32px; }
+  .chip {
+    font-size: 13px; padding: 7px 14px; border-radius: 999px;
+    border: 1px solid var(--line-strong); color: var(--soft);
+  }
+  .scales { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin: 0 0 34px; }
+  .scale-card { border: 1px solid var(--line); border-radius: 4px; padding: 18px 20px; background: var(--glass); }
+  .scale-card .k { font-size: 12px; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px; }
+  .scale-card .t { font-size: 17px; font-weight: 500; }
+  .scale-card .t small { display: block; font-size: 13px; color: var(--muted); font-weight: 400; margin-top: 4px; }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    appearance: none; border: 1px solid transparent; cursor: pointer;
+    font-size: 15px; font-weight: 600; letter-spacing: .005em;
+    padding: 15px 26px; border-radius: 999px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    color: var(--night); text-decoration: none;
+    background: linear-gradient(100deg, var(--lav) 0%, var(--cream) 55%, var(--yellow) 100%);
+    box-shadow: 0 0 0 rgba(255,214,107,0);
+    transition: transform .18s var(--ease), box-shadow .25s var(--ease), opacity .2s;
+  }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 8px 34px rgba(255,214,107,.28); }
+  .btn:active { transform: translateY(1px) scale(.98); }
+  .btn:focus-visible, .opt:focus-visible { outline: 2px solid var(--yellow); outline-offset: 3px; }
+  .btn[disabled] { opacity: .35; cursor: default; transform: none; box-shadow: none; }
+  .btn--ghost { background: transparent; color: var(--text); border-color: var(--line-strong); }
+  .btn--ghost:hover { border-color: var(--text); box-shadow: none; }
+  .btn .arr { transition: transform .2s var(--ease); }
+  .btn:hover .arr { transform: translateX(3px); }
+
+  /* ---------- Quiz ---------- */
+  .quiz { position: relative; }
+  .progress { display: grid; grid-template-columns: repeat(20, 1fr); gap: 4px; margin: 6px 0 30px; }
+  .progress i { height: 3px; border-radius: 2px; background: var(--line); transition: background .4s var(--ease); }
+  .progress i.done { background: linear-gradient(90deg, var(--lav), var(--yellow)); }
+  .progress i.now { background: var(--text); }
+
+  .section-label {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 13px; color: var(--soft); margin-bottom: 18px;
+  }
+  .section-label .dotc { width: 10px; height: 10px; border-radius: 50%; }
+  .section-label[data-scale="att"] .dotc { background: var(--lav); box-shadow: 0 0 12px var(--lav); }
+  .section-label[data-scale="act"] .dotc { background: var(--orange); box-shadow: 0 0 12px var(--orange); }
+
+  .q-num { font-size: 13px; color: var(--muted); margin-bottom: 10px; font-variant-numeric: tabular-nums; }
+  h2.q-text {
+    font-weight: 400; font-size: clamp(24px, 3.8vw, 34px); line-height: 1.18; letter-spacing: -0.015em;
+    margin: 0 0 32px; text-wrap: balance; min-height: 2.36em;
+  }
+  .q-wrap.enter { animation: rise .5s var(--ease) both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(12px); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
+
+  .options { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .opt {
+    appearance: none; width: 100%; cursor: pointer; position: relative; overflow: hidden;
+    border: 1px solid var(--line-strong); border-radius: 4px; background: var(--glass);
+    color: var(--text); text-align: left;
+    padding: 14px 14px 16px; min-height: 92px;
+    display: flex; flex-direction: column; justify-content: space-between; gap: 18px;
+    transition: border-color .2s var(--ease), transform .2s var(--ease), background .2s;
+    isolation: isolate;
+  }
+  .opt::before {
+    content: ""; position: absolute; inset: -30%; z-index: -1; opacity: 0;
+    background: radial-gradient(60% 60% at 30% 30%, var(--cream), transparent 70%), linear-gradient(120deg, var(--lav), var(--yellow) 60%, var(--orange));
+    filter: blur(14px); transition: opacity .35s var(--ease);
+  }
+  .opt .n { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .opt .l { font-size: 15px; font-weight: 500; }
+  .opt:hover { border-color: var(--text); transform: translateY(-2px); }
+  .opt.selected { border-color: transparent; color: var(--night); }
+  .opt.selected .n { color: rgba(3,6,26,.6); }
+  .opt.selected::before { opacity: 1; }
+  .opt.enter { animation: rise .45s var(--ease) both; }
+
+  .nav { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 34px; padding-top: 22px; border-top: 1px solid var(--line); }
+  .hint { font-size: 12px; color: var(--muted); text-align: center; line-height: 1.6; }
+
+  /* ---------- Result ---------- */
+  .result-frame { aspect-ratio: 16 / 7; margin: 6px 0 30px; }
+  .result-frame .total {
+    position: absolute; z-index: 2; left: 6%; bottom: 9%;
+  }
+  .total .num { font-size: clamp(48px, 9vw, 92px); font-weight: 300; line-height: .9; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+  .total .num small { font-size: .28em; color: var(--soft); letter-spacing: 0; margin-left: 6px; font-weight: 400; }
+  .total .cap { font-size: 13px; color: var(--soft); margin-top: 8px; }
+
+  .result h2 { font-weight: 400; font-size: clamp(26px, 4.4vw, 40px); line-height: 1.1; letter-spacing: -0.02em; margin: 0 0 14px; text-wrap: balance; }
+  .result .desc { font-size: 18px; color: var(--soft); max-width: 62ch; margin: 0 0 12px; }
+  .result .sub { font-size: 14px; color: var(--muted); max-width: 64ch; margin: 0 0 36px; }
+
+  .block { border-top: 1px solid var(--line); padding-top: 26px; margin-top: 36px; }
+  .block > h3 { font-size: 13px; font-weight: 500; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; margin: 0 0 20px; }
+
+  .meter { padding: 18px 0 22px; border-bottom: 1px solid var(--line); }
+  .meter:last-child { border-bottom: 0; }
+  .meter-head { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; margin-bottom: 4px; }
+  .meter-name { font-size: 18px; font-weight: 500; }
+  .meter-name small { display: block; font-size: 13px; color: var(--muted); font-weight: 400; }
+  .meter-val { font-size: 30px; font-weight: 300; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; white-space: nowrap; }
+  .meter-val small { font-size: 14px; color: var(--muted); }
+  .lvl { display: inline-block; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px; color: var(--night); margin: 6px 0 14px; }
+  .lvl[data-l="low"] { background: var(--lav); }
+  .lvl[data-l="mid"] { background: var(--cream); }
+  .lvl[data-l="high"] { background: linear-gradient(90deg, var(--yellow), var(--orange)); }
+  .track { position: relative; height: 34px; }
+  .zones { position: absolute; left: 0; right: 0; top: 10px; height: 6px; display: flex; gap: 3px; }
+  .zones span { height: 100%; border-radius: 3px; }
+  .zones span:nth-child(1) { background: rgba(185,180,255,.45); }
+  .zones span:nth-child(2) { background: rgba(255,246,216,.45); }
+  .zones span:nth-child(3) { background: linear-gradient(90deg, rgba(255,214,107,.7), rgba(255,138,61,.8)); }
+  .zone-labels { position: absolute; left: 0; right: 0; top: 20px; display: flex; gap: 3px; font-size: 11px; color: var(--muted); }
+  .zone-labels span { overflow: hidden; white-space: nowrap; text-overflow: clip; padding-top: 2px; }
+  .pin {
+    position: absolute; top: 4px; width: 18px; height: 18px; margin-left: -9px; border-radius: 50%;
+    background: #fff; box-shadow: 0 0 0 4px rgba(255,255,255,.15), 0 0 18px rgba(255,255,255,.9);
+    left: 0; transition: left 1.2s var(--ease) .3s;
+  }
+
+  /* Attitude × Actions map */
+  .map-wrap { display: grid; grid-template-columns: minmax(0, 340px) 1fr; gap: 28px; align-items: start; }
+  .map { position: relative; aspect-ratio: 1; border: 1px solid var(--line-strong); border-radius: 4px; overflow: hidden; background: rgba(255,255,255,.02); }
+  .map .q { position: absolute; width: 50%; height: 50%; padding: 12px; font-size: 12px; line-height: 1.3; color: var(--muted); transition: background .5s, color .5s; }
+  .map .q b { display: block; font-weight: 600; color: var(--soft); }
+  .map .q.tl { left: 0; top: 0; } .map .q.tr { right: 0; top: 0; text-align: right; }
+  .map .q.bl { left: 0; bottom: 0; display: flex; flex-direction: column; justify-content: flex-end; }
+  .map .q.br { right: 0; bottom: 0; text-align: right; display: flex; flex-direction: column; justify-content: flex-end; }
+  .map .q.on { background: rgba(255,214,107,.10); color: var(--text); }
+  .map .q.on b { color: var(--yellow); }
+  .map .axis-x, .map .axis-y { position: absolute; background: var(--line); }
+  .map .axis-x { left: 0; right: 0; top: 50%; height: 1px; }
+  .map .axis-y { top: 0; bottom: 0; left: 50%; width: 1px; }
+  .map .dot {
+    position: absolute; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%;
+    background: radial-gradient(circle, #fff 0 30%, var(--yellow) 55%, rgba(255,214,107,0) 72%);
+    box-shadow: 0 0 30px 8px rgba(255,214,107,.45);
+    left: 50%; top: 50%; transition: left 1.2s var(--ease) .5s, top 1.2s var(--ease) .5s;
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.18); } }
+  .map-cap { font-size: 12px; color: var(--muted); margin-top: 8px; display: flex; justify-content: space-between; gap: 10px; }
+
+  .combo-list { display: grid; gap: 12px; }
+  .combo { border: 1px solid var(--line); border-radius: 4px; padding: 16px 18px; background: var(--glass); opacity: .5; transition: opacity .4s, border-color .4s; }
+  .combo h4 { margin: 0 0 6px; font-size: 15px; font-weight: 600; }
+  .combo p { margin: 0; font-size: 14.5px; color: var(--soft); }
+  .combo.on { opacity: 1; border-color: rgba(255,214,107,.6); background: rgba(255,214,107,.06); }
+  .combo.on h4::before { content: "● "; color: var(--yellow); }
+
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 420px; }
+  th, td { text-align: left; padding: 11px 10px; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+  th { font-weight: 500; color: var(--muted); font-size: 12px; letter-spacing: .04em; text-transform: uppercase; }
+  td.cur { color: var(--yellow); font-weight: 600; }
+  .fine { font-size: 13px; color: var(--muted); max-width: 70ch; margin: 14px 0 0; }
+
+  .important { border-left: 2px solid var(--lav); padding: 2px 0 2px 18px; color: var(--soft); font-size: 14.5px; max-width: 68ch; }
+  .important b { color: var(--text); }
+
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
+
+  footer {
+    width: 100%; max-width: 880px; margin: 0 auto; padding: 18px 24px 30px;
+    font-size: 12px; color: var(--muted); line-height: 1.6;
+  }
+
+  .toast {
+    position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 10px);
+    background: var(--cream); color: var(--night); font-size: 14px; font-weight: 600;
+    padding: 11px 18px; border-radius: 999px; pointer-events: none; opacity: 0;
+    transition: opacity .25s var(--ease), transform .25s var(--ease); z-index: 10;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  .result > * { animation: rise .6s var(--ease) both; }
+  .result > *:nth-child(2) { animation-delay: .12s; }
+  .result > *:nth-child(3) { animation-delay: .2s; }
+  .result > *:nth-child(4) { animation-delay: .28s; }
+  .result > *:nth-child(n+5) { animation-delay: .36s; }
+
+  @media (max-width: 720px) {
+    .options { grid-template-columns: 1fr; gap: 8px; }
+    .opt { min-height: 0; flex-direction: row; align-items: center; justify-content: flex-start; gap: 14px; padding: 14px 16px; }
+    .opt .n { width: 14px; }
+    .map-wrap { grid-template-columns: 1fr; }
+    .map, .map-cap { max-width: 360px; }
+    .hint { display: none; }
+    .nav .btn { flex: 1; }
+    .result-frame { aspect-ratio: 4 / 3; }
+    .orb { top: -50%; height: 130%; left: -20%; right: -20%; }
+    .hero-frame { aspect-ratio: 4 / 3; }
+    .hero-frame .title-in { max-width: 70%; }
+  }
+  @media (max-width: 520px) {
+    .topbar, main, footer { padding-left: 16px; padding-right: 16px; }
+    .lead, .result .desc { font-size: 16.5px; }
+    .note { font-size: 13px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="ambient" aria-hidden="true"><i></i><i></i><i></i></div>
+
+<div class="app">
+  <div class="topbar">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.9 6.4 2.6 9.1 12 12-9.4 2.9-11.1 5.6-12 12-.9-6.4-2.6-9.1-12-12C9.4 9.1 11.1 6.4 12 0z" fill="#B9B4FF"/></svg>
+      The Future Of Work · DANI
+    </div>
+    <div class="counter" id="counter" aria-live="polite"></div>
+  </div>
+
+  <main>
+    <!-- Start -->
+    <section class="screen" id="screen-start">
+      <div class="frame frame--night hero-frame" aria-hidden="true">
+        <div class="beam-wrap"><div class="beam"></div></div><div class="beam-wrap beam-wrap--core"><div class="beam"></div></div>
+        <svg class="star" viewBox="0 0 24 24"><path d="M12 0c.9 6.4 2.6 9.1 12 12-9.4 2.9-11.1 5.6-12 12-.9-6.4-2.6-9.1-12-12C9.4 9.1 11.1 6.4 12 0z" fill="#C9C5FF" transform="rotate(14 12 12)"/></svg>
+        <div class="title-in">d.school Ambiguity<br>Navigation Instrument</div>
+      </div>
+
+      <h1>DANI: как вы работаете с <span>неопределённостью?</span></h1>
+      <p class="lead">Русская адаптация d.school Ambiguity Navigation Instrument (DANI).</p>
+      <p class="lead">Для каждого утверждения отметьте один вариант: никогда, редко, иногда, часто или всегда. После всех 20 вопросов посчитайте три результата: NA Attitude, NA Actions и NA Total Score.</p>
+
+      <div class="meta">
+        <span class="chip">20 утверждений</span>
+        <span class="chip">5 вариантов ответа</span>
+        <span class="chip">3 результата</span>
+      </div>
+
+      <div class="scales">
+        <div class="scale-card"><div class="k">Вопросы 1–10</div><div class="t">Отношение к неопределённости<small>NA Attitude</small></div></div>
+        <div class="scale-card"><div class="k">Вопросы 11–20</div><div class="t">Действия в неопределённости<small>NA Actions</small></div></div>
+      </div>
+
+      <button class="btn" id="btn-start" type="button">Начать <span class="arr">→</span></button>
+    </section>
+
+    <!-- Quiz -->
+    <section class="screen quiz" id="screen-quiz" hidden>
+      <div class="progress" id="progress" aria-hidden="true"></div>
+      <div class="q-wrap" id="q-wrap">
+        <div class="section-label" id="q-section"><span class="dotc"></span><span id="q-section-text"></span></div>
+        <div class="q-num" id="q-num"></div>
+        <h2 class="q-text" id="q-text"></h2>
+      </div>
+      <ul class="options" id="options" role="group" aria-labelledby="q-text"></ul>
+      <div class="nav">
+        <button class="btn btn--ghost" id="btn-back" type="button">← Назад</button>
+        <div class="hint">1–5 — выбрать ответ · Enter — дальше</div>
+        <button class="btn" id="btn-next" type="button" disabled>Дальше <span class="arr">→</span></button>
+      </div>
+    </section>
+
+    <!-- Result -->
+    <section class="screen result" id="screen-result" hidden>
+      <div class="frame result-frame">
+        <div class="orb" id="r-orb" data-palette="sun" aria-hidden="true"><i class="o1"></i><i class="o2"></i><i class="o3"></i><i class="o4"></i></div>
+        <div class="total">
+          <div class="num"><span id="r-total">0</span><small>из 100</small></div>
+          <div class="cap">NA Total Score</div>
+        </div>
+        <div class="note" id="r-note"></div>
+      </div>
+
+      <h2 id="r-title"></h2>
+      <p class="desc" id="r-desc"></p>
+      <p class="sub" id="r-sub"></p>
+
+      <div class="block">
+        <h3>Ваши баллы</h3>
+        <div id="meters"></div>
+      </div>
+
+      <div class="block">
+        <h3>Четыре сочетания Attitude × Actions</h3>
+        <div class="map-wrap">
+          <div>
+            <div class="map" id="map" aria-hidden="true">
+              <div class="q tl" data-k="high-low"><b>Высокий Attitude</b>низкий Actions</div>
+              <div class="q tr" data-k="high-high"><b>Высокий Attitude</b>высокий Actions</div>
+              <div class="q bl" data-k="low-low"><b>Низкий Attitude</b>низкий Actions</div>
+              <div class="q br" data-k="low-high"><b>Низкий Attitude</b>высокий Actions</div>
+              <span class="axis-x"></span><span class="axis-y"></span>
+              <span class="dot" id="map-dot"></span>
+            </div>
+            <div class="map-cap"><span>↑ Attitude</span><span>Actions →</span></div>
+          </div>
+          <div class="combo-list" id="combos"></div>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>Опубликованные авторами ориентировочные диапазоны</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Шкала</th><th>Низкий</th><th>Средний</th><th>Высокий</th></tr></thead>
+            <tbody id="ranges"></tbody>
+          </table>
+        </div>
+        <p class="fine">Примечание: в Table 2 статьи нижние диапазоны начинаются с 0. При шкале 1–5 фактический минимум составляет 10 для каждой из двух шкал и 20 для Total. Здесь диапазоны воспроизведены так, как опубликованы авторами.</p>
+      </div>
+
+      <div class="block">
+        <h3>Как посчитан результат</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Шкала</th><th>Подсчёт</th><th>Ваш балл</th></tr></thead>
+            <tbody>
+              <tr><td>NA Attitude (1–10)</td><td>Обратный подсчёт: Никогда = 5 · Редко = 4 · Иногда = 3 · Часто = 2 · Всегда = 1</td><td class="cur" id="c-att"></td></tr>
+              <tr><td>NA Actions (11–20)</td><td>Обычный подсчёт: Никогда = 1 · Редко = 2 · Иногда = 3 · Часто = 4 · Всегда = 5</td><td class="cur" id="c-act"></td></tr>
+              <tr><td>Score NA Total</td><td>Сложите NA Attitude + NA Actions</td><td class="cur" id="c-total"></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>Важно</h3>
+        <p class="important">DANI — self-report questionnaire. Авторы указывают, что на текущем этапе инструмент точнее работает на уровне групп; индивидуальная погрешность широка. Не установлены criterion validity и test–retest reliability, поэтому <b>DANI не следует трактовать как психологическую диагностику.</b></p>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="btn-copy" type="button">Скопировать результат</button>
+        <button class="btn btn--ghost" id="btn-restart" type="button">Пройти заново</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Источник: Britos Cavagnaro et al., “Assessing the ability to navigate ambiguity: An essential skill for imagining possible futures”, Possibility Studies &amp; Society. Русский текст — перевод и редакционная адаптация оригинального DANI.
+  </footer>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+  // ---------- Текст из документа ----------
+  var SECTIONS = {
+    att: "Отношение к неопределённости — NA Attitude",
+    act: "Действия в неопределённости — NA Actions"
+  };
+  var OPTS = ["Никогда", "Редко", "Иногда", "Часто", "Всегда"];
+
+  var QUESTIONS = [
+    { s: "att", t: "Я предпочитаю работать над задачами, у которых есть один правильный ответ." },
+    { s: "att", t: "Я предпочитаю задачи с ясным завершением тем, в которых остаются открытые возможности." },
+    { s: "att", t: "Я теряю терпение, если путь к решению неясен." },
+    { s: "att", t: "Меня может беспокоить неопределённость при решении задачи." },
+    { s: "att", t: "Я испытываю разочарование, когда испробованный подход не приводит к решению." },
+    { s: "att", t: "Я теряю мотивацию, когда моя идея не срабатывает." },
+    { s: "att", t: "Я теряю терпение, когда другие предлагают крайне необычные решения проблемы." },
+    { s: "att", t: "Мне некомфортно, когда я не знаю, какие шаги делать дальше в проекте." },
+    { s: "att", t: "Очень нестандартные идеи скорее сбивают проект с курса, чем помогают ему двигаться вперёд." },
+    { s: "att", t: "Мне трудно переключаться с мелких деталей на «общую картину» и обратно." },
+    { s: "act", t: "Мне комфортно придумывать много новых идей." },
+    { s: "act", t: "Решая проблему, я стараюсь сначала придумать несколько идей, даже если они могут не сработать." },
+    { s: "act", t: "Разрабатывая идеи для решения большой проблемы, я учитываю все возможные заинтересованные стороны." },
+    { s: "act", t: "Прежде чем решать проблему, я рассматриваю её с разных сторон." },
+    { s: "act", t: "Чем больше информации о проблеме я могу собрать, тем вероятнее, что у меня появится новая идея." },
+    { s: "act", t: "Когда я что-то создаю, я умею включать в работу точки зрения других людей." },
+    { s: "act", t: "Мне нравится находить связи в наборах данных." },
+    { s: "act", t: "Я считаю, что сбор данных разных типов даёт наиболее полную картину проблемы." },
+    { s: "act", t: "Я ценю эксперименты, потому что всегда узнаю из них что-то новое, независимо от того, нахожу ли я решение, которое искал." },
+    { s: "act", t: "Я приветствую точки зрения, отличающиеся от моей." }
+  ];
+
+  // Опубликованные авторами диапазоны
+  var RANGES = {
+    att:   { name: "NA Attitude", full: "Отношение к неопределённости", min: 10, max: 50, low: [0, 26], mid: [27, 36], high: [37, 50] },
+    act:   { name: "NA Actions", full: "Действия в неопределённости", min: 10, max: 50, low: [0, 34], mid: [35, 45], high: [46, 50] },
+    total: { name: "NA Total Score", full: "Attitude + Actions", min: 20, max: 100, low: [0, 56], mid: [57, 78], high: [79, 100] }
+  };
+  var LVL_NAME = { low: "Низкий", mid: "Средний", high: "Высокий" };
+
+  var COMBOS = {
+    "low-high":  { title: "Низкий Attitude + высокий Actions", text: "Есть набор стратегий и способов действия, но сама неопределённость может вызывать дискомфорт, фрустрацию или снижение мотивации.", palette: "sun" },
+    "high-high": { title: "Высокий Attitude + высокий Actions", text: "Комфорт с открытыми задачами сочетается с широким набором стратегий и способов работы.", palette: "fire" },
+    "low-low":   { title: "Низкий Attitude + низкий Actions", text: "Неопределённость, вероятно, вызывает дискомфорт, а способов эффективно действовать в ней может не хватать.", palette: "dusk" },
+    "high-low":  { title: "Высокий Attitude + низкий Actions", text: "Есть уверенность и комфорт в неопределённости, но может не хватать стратегий, чтобы действовать в ней эффективно.", palette: "sky" }
+  };
+  var COMBO_ORDER = ["low-high", "high-high", "low-low", "high-low"];
+
+  // ---------- Аналитика ----------
+  function track(name, params) {
+    try {
+      if (window.ym && window.YM_ID) ym(window.YM_ID, "reachGoal", name, params || {});
+      if (window.gtag) gtag("event", name, params || {});
+    } catch (e) {}
+  }
+
+  var $ = function (id) { return document.getElementById(id); };
+  var screens = { start: $("screen-start"), quiz: $("screen-quiz"), result: $("screen-result") };
+  var reduce = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  var answers = new Array(QUESTIONS.length).fill(null);
+  var idx = 0;
+  var last = null;
+
+  function pad(n) { return n < 10 ? "0" + n : "" + n; }
+
+  function show(name) {
+    Object.keys(screens).forEach(function (k) { screens[k].hidden = (k !== name); });
+    window.scrollTo({ top: 0, behavior: "auto" });
+    renderCounter();
+  }
+
+  function renderCounter() {
+    $("counter").innerHTML = screens.quiz.hidden ? "" : "<b>" + pad(idx + 1) + "</b> / " + QUESTIONS.length;
+  }
+
+  function renderQuestion() {
+    var q = QUESTIONS[idx];
+    var prog = $("progress"); prog.innerHTML = "";
+    QUESTIONS.forEach(function (_, i) {
+      var c = document.createElement("i");
+      if (i === idx) c.className = "now";
+      else if (answers[i] !== null) c.className = "done";
+      prog.appendChild(c);
+    });
+
+    $("q-section").setAttribute("data-scale", q.s);
+    $("q-section-text").textContent = SECTIONS[q.s];
+    $("q-num").textContent = "Утверждение " + (idx + 1) + " из " + QUESTIONS.length;
+    $("q-text").textContent = q.t;
+    var wrap = $("q-wrap"); wrap.classList.remove("enter"); void wrap.offsetWidth; wrap.classList.add("enter");
+
+    var list = $("options"); list.innerHTML = "";
+    OPTS.forEach(function (label, i) {
+      var li = document.createElement("li");
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "opt enter" + (answers[idx] === i ? " selected" : "");
+      b.style.animationDelay = (80 + i * 50) + "ms";
+      b.setAttribute("aria-pressed", answers[idx] === i ? "true" : "false");
+      b.innerHTML = '<span class="n">' + (i + 1) + '</span><span class="l">' + label + "</span>";
+      b.addEventListener("click", function () { choose(i); });
+      li.appendChild(b); list.appendChild(li);
+    });
+
+    $("btn-back").style.visibility = idx === 0 ? "hidden" : "visible";
+    $("btn-next").disabled = answers[idx] === null;
+    $("btn-next").innerHTML = (idx === QUESTIONS.length - 1 ? "Показать результат" : "Дальше") + ' <span class="arr">→</span>';
+    renderCounter();
+  }
+
+  function choose(i) {
+    answers[idx] = i;
+    $("options").querySelectorAll(".opt").forEach(function (b, j) {
+      b.classList.toggle("selected", j === i);
+      b.setAttribute("aria-pressed", j === i ? "true" : "false");
+    });
+    $("btn-next").disabled = false;
+    $("btn-next").focus({ preventScroll: true });
+  }
+
+  function next() {
+    if (answers[idx] === null) return;
+    if (idx < QUESTIONS.length - 1) { idx++; renderQuestion(); } else { renderResult(); }
+  }
+  function back() { if (idx > 0) { idx--; renderQuestion(); } }
+
+  // Attitude — обратный подсчёт, Actions — обычный
+  function points(i) { var a = answers[i]; if (a === null) return 0; return QUESTIONS[i].s === "att" ? 5 - a : a + 1; }
+  function scaleScore(s) { var sum = 0; QUESTIONS.forEach(function (q, i) { if (q.s === s) sum += points(i); }); return sum; }
+  function levelOf(key, v) { var r = RANGES[key]; return v <= r.low[1] ? "low" : v <= r.mid[1] ? "mid" : "high"; }
+
+  function meterHTML(key, v, lvl) {
+    var r = RANGES[key], span = r.max - r.min;
+    var w = function (a, b) { return Math.max(0, (Math.min(b, r.max) - Math.max(a, r.min) + (a <= r.min ? 0 : 1)) / span * 100); };
+    var widths = [w(r.min, r.low[1]), w(r.mid[0], r.mid[1]), w(r.high[0], r.high[1])];
+    var zones = widths.map(function (x) { return '<span style="flex:' + x + '"></span>'; }).join("");
+    var labels = [r.low, r.mid, r.high].map(function (z, i) {
+      return '<span style="flex:' + widths[i] + '">' + (i === 0 ? r.min : z[0]) + "–" + z[1] + "</span>";
+    }).join("");
+    return '<div class="meter"><div class="meter-head"><div class="meter-name">' + r.name + "<small>" + r.full + "</small></div>" +
+      '<div class="meter-val">' + v + " <small>из " + r.max + "</small></div></div>" +
+      '<span class="lvl" data-l="' + lvl + '">' + LVL_NAME[lvl] + " уровень</span>" +
+      '<div class="track" role="img" aria-label="' + r.name + ": " + v + " из " + r.max + ", " + LVL_NAME[lvl].toLowerCase() + ' уровень">' +
+      '<div class="zones">' + zones + '</div><div class="zone-labels">' + labels + '</div>' +
+      '<span class="pin" data-pos="' + ((v - r.min) / span * 100) + '"></span></div></div>';
+  }
+
+  function renderResult() {
+    var att = scaleScore("att"), act = scaleScore("act"), total = att + act;
+    var la = levelOf("att", att), lc = levelOf("act", act), lt = levelOf("total", total);
+    last = { att: att, act: act, total: total, la: la, lc: lc, lt: lt };
+
+    // Какие из четырёх сочетаний подходят: средний уровень лежит между низким и высоким
+    var aOpts = la === "mid" ? ["low", "high"] : [la];
+    var cOpts = lc === "mid" ? ["low", "high"] : [lc];
+    var keys = [];
+    aOpts.forEach(function (a) { cOpts.forEach(function (c) { keys.push(a + "-" + c); }); });
+    last.keys = keys;
+
+    if (keys.length === 1) {
+      var combo = COMBOS[keys[0]];
+      $("r-title").textContent = combo.title;
+      $("r-desc").textContent = combo.text;
+      $("r-orb").setAttribute("data-palette", combo.palette);
+      $("r-note").innerHTML = "ваше<br>сочетание";
+    } else {
+      var mids = [];
+      if (la === "mid") mids.push("NA Attitude");
+      if (lc === "mid") mids.push("NA Actions");
+      $("r-title").textContent = mids.length > 1 ? "Средний уровень по обеим шкалам" : "Средний уровень по шкале " + mids[0];
+      $("r-desc").textContent = "По " + (mids.length > 1 ? "обеим шкалам" : "шкале " + mids[0]) + " результат в среднем диапазоне — между низким и высоким уровнем. Поэтому ниже подсвечены " + (keys.length === 2 ? "два" : "все четыре") + " сочетания, между которыми он находится.";
+      $("r-orb").setAttribute("data-palette", la === "low" ? "sun" : la === "high" ? "sky" : lc === "low" ? "dusk" : "fire");
+      $("r-note").innerHTML = "между<br>сочетаниями";
+    }
+    $("r-sub").textContent = "NA Attitude — " + att + " из 50 (" + LVL_NAME[la].toLowerCase() + "), NA Actions — " + act + " из 50 (" + LVL_NAME[lc].toLowerCase() + "), NA Total Score — " + total + " из 100 (" + LVL_NAME[lt].toLowerCase() + ").";
+
+    $("meters").innerHTML = meterHTML("att", att, la) + meterHTML("act", act, lc) + meterHTML("total", total, lt);
+
+    $("combos").innerHTML = COMBO_ORDER.map(function (k) {
+      return '<div class="combo' + (keys.indexOf(k) > -1 ? " on" : "") + '"><h4>' + COMBOS[k].title + "</h4><p>" + COMBOS[k].text + "</p></div>";
+    }).join("");
+    document.querySelectorAll("#map .q").forEach(function (q) { q.classList.toggle("on", keys.indexOf(q.getAttribute("data-k")) > -1); });
+
+    $("ranges").innerHTML = ["att", "act", "total"].map(function (k) {
+      var r = RANGES[k], l = last[k === "att" ? "la" : k === "act" ? "lc" : "lt"];
+      return "<tr><td>" + r.name + "</td>" + ["low", "mid", "high"].map(function (z) {
+        return '<td class="' + (z === l ? "cur" : "") + '">' + r[z][0] + "–" + r[z][1] + "</td>";
+      }).join("") + "</tr>";
+    }).join("");
+    $("c-att").textContent = att; $("c-act").textContent = act; $("c-total").textContent = total;
+
+    show("result");
+
+    // Анимации: счётчик, бегунки, точка на карте
+    var dot = $("map-dot"); dot.style.left = "50%"; dot.style.top = "50%";
+    var pins = document.querySelectorAll("#meters .pin");
+    requestAnimationFrame(function () { requestAnimationFrame(function () {
+      pins.forEach(function (p) { p.style.left = p.getAttribute("data-pos") + "%"; });
+      dot.style.left = (8 + (act - 10) / 40 * 84) + "%";
+      dot.style.top = (92 - (att - 10) / 40 * 84) + "%";
+    }); });
+    countUp($("r-total"), total);
+
+    track("quiz_finish", { attitude: att, actions: act, total: total });
+    try { localStorage.setItem("dani_last", JSON.stringify({ att: att, act: act, total: total, answers: answers, at: Date.now() })); } catch (e) {}
+  }
+
+  function countUp(el, to) {
+    if (reduce) { el.textContent = to; return; }
+    var t0 = null, dur = 1100;
+    function step(t) {
+      if (t0 === null) t0 = t;
+      var p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(to * e);
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function restart() { answers = new Array(QUESTIONS.length).fill(null); idx = 0; show("quiz"); renderQuestion(); }
+
+  function toast(msg) {
+    var t = $("toast"); t.textContent = msg; t.classList.add("show");
+    clearTimeout(t._h); t._h = setTimeout(function () { t.classList.remove("show"); }, 1800);
+  }
+
+  function copyResult() {
+    if (!last) return;
+    var text = "DANI: как вы работаете с неопределённостью?\n" +
+      "NA Attitude: " + last.att + " из 50 (" + LVL_NAME[last.la].toLowerCase() + ")\n" +
+      "NA Actions: " + last.act + " из 50 (" + LVL_NAME[last.lc].toLowerCase() + ")\n" +
+      "NA Total Score: " + last.total + " из 100 (" + LVL_NAME[last.lt].toLowerCase() + ")\n" +
+      "Пройти: " + location.href.split("#")[0];
+    var ok = function () { toast("Скопировано"); track("copy_result"); };
+    var fail = function () { toast("Не удалось скопировать"); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok, fail);
+    else {
+      var ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); ok(); } catch (e) { fail(); }
+      document.body.removeChild(ta);
+    }
+  }
+
+  $("btn-start").addEventListener("click", function () { track("quiz_start"); show("quiz"); renderQuestion(); });
+  $("btn-next").addEventListener("click", next);
+  $("btn-back").addEventListener("click", back);
+  $("btn-restart").addEventListener("click", restart);
+  $("btn-copy").addEventListener("click", copyResult);
+
+  document.addEventListener("keydown", function (e) {
+    if (screens.quiz.hidden) return;
+    var k = e.key;
+    if (/^[1-5]$/.test(k)) { choose(+k - 1); e.preventDefault(); }
+    else if (k === "Enter" || k === "ArrowRight") { if (document.activeElement && document.activeElement.id === "btn-back") return; next(); e.preventDefault(); }
+    else if (k === "ArrowLeft") back();
+  });
+</script>
+</body>
+</html>
