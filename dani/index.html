@@ -180,7 +180,21 @@
   .scales { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin: 0 0 34px; }
   .scale-card { border: 1px solid var(--line); border-radius: 4px; padding: 18px 20px; background: var(--glass); }
   .scale-card .k { font-size: 12px; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px; }
-  .scale-card .t { font-size: 17px; font-weight: 700; }
+  .scale-card .t { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+  .scale-card p { margin: 0; font-size: 15px; color: var(--soft); }
+  .scale-card:nth-child(1) { border-top: 2px solid var(--lav); }
+  .scale-card:nth-child(2) { border-top: 2px solid var(--orange); }
+  .howto { border-top: 1px solid var(--line); padding-top: 22px; margin: 30px 0 28px; max-width: 62ch; }
+  .howto h2 { font-size: 20px; font-weight: 800; margin: 0 0 10px; letter-spacing: -0.01em; }
+  .howto p { margin: 0 0 8px; color: var(--soft); }
+  .lib { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 22px; border-radius: 4px; margin-bottom: 26px;
+    background: linear-gradient(110deg, rgba(185,180,255,.16), rgba(255,214,107,.12)); border: 1px solid rgba(255,214,107,.35); }
+  .lib .rt { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+  .lib p { margin: 0; font-size: 14.5px; color: var(--soft); max-width: 56ch; }
+  .lib .btn { padding: 12px 20px; font-size: 14px; }
+  .rec-list--books { grid-template-columns: 1fr; }
+  .rec--book .tag { display: inline-block; font-size: 11px; font-weight: 700; color: var(--yellow); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 4px; }
+  .acc-wrap { margin-bottom: 26px; }
   .scale-card .t small { display: block; font-size: 13px; color: var(--muted); font-weight: 400; margin-top: 4px; }
 
   /* ---------- Buttons ---------- */
@@ -454,41 +468,24 @@
       <div class="frame frame--night hero-frame" aria-hidden="true">
         <div class="beam-wrap"><div class="beam"></div></div><div class="beam-wrap beam-wrap--core"><div class="beam"></div></div>
         <svg class="star" viewBox="0 0 24 24"><path d="M12 0c.9 6.4 2.6 9.1 12 12-9.4 2.9-11.1 5.6-12 12-.9-6.4-2.6-9.1-12-12C9.4 9.1 11.1 6.4 12 0z" fill="#C9C5FF" transform="rotate(14 12 12)"/></svg>
-        <div class="title-in">d.school Ambiguity<br>Navigation Instrument</div>
       </div>
 
       <h1>DANI: как вы работаете с <span>неопределённостью?</span></h1>
-      <p class="lead">Русская адаптация d.school Ambiguity Navigation Instrument (DANI).</p>
-
-      <div class="intro">
-        <div class="intro-card">
-          <div class="k">Почему это важно лидеру</div>
-          <p>Чем больше ответственность, тем меньше задач с одним правильным ответом. Решения приходится принимать, когда данных не хватает, план меняется по ходу, а команда ждёт ясности.</p>
-          <p>Умение работать с неопределённостью — не черта характера, а навык. Его можно развивать.</p>
-        </div>
-        <div class="intro-card">
-          <div class="k">Что такое DANI</div>
-          <p>d.school Ambiguity Navigation Instrument — опросник самооценки, который создали исследователи Стэнфордской школы дизайна d.school.</p>
-          <p>Он смотрит на две стороны одного умения: как вы относитесь к неопределённости и что делаете, когда готового ответа нет.</p>
-        </div>
-        <div class="intro-card">
-          <div class="k">Что вы получите</div>
-          <p>Баллы по двум шкалам и общий результат, одно из четырёх сочетаний и подборку упражнений и книг под ваш результат.</p>
-        </div>
-      </div>
-
-      <div class="meta">
-        <span class="chip">20 утверждений</span>
-        <span class="chip">5 вариантов ответа</span>
-        <span class="chip">3 результата</span>
-      </div>
+      <p class="lead">Чем больше ответственность, тем чаще приходится принимать решения без единственного правильного ответа. Данных не хватает, планы меняются, а команда ждёт от вас ясности. Навыки работы с неопределённостью можно развивать — и начать стоит с понимания того, как вы обычно реагируете и действуете в таких ситуациях.</p>
+      <p class="lead">Этот тест — русская адаптация d.school Ambiguity Navigation Instrument (DANI), опросника самооценки, разработанного в Стэнфордской школе дизайна d.school. Он рассматривает две стороны работы с неопределённостью:</p>
 
       <div class="scales">
-        <div class="scale-card"><div class="k">Вопросы 1–10</div><div class="t">Отношение к неопределённости<small>10 утверждений</small></div></div>
-        <div class="scale-card"><div class="k">Вопросы 11–20</div><div class="t">Действия в условиях неопределённости<small>10 утверждений</small></div></div>
+        <div class="scale-card"><div class="k">Утверждения 1–10</div><div class="t">Отношение</div><p>Как вы воспринимаете ситуации, в которых нет ясности и готового ответа.</p></div>
+        <div class="scale-card"><div class="k">Утверждения 11–20</div><div class="t">Действия</div><p>Что вы предпринимаете, чтобы разобраться в ситуации и двигаться вперёд.</p></div>
       </div>
 
-      <p class="start-howto">Для каждого утверждения отметьте один вариант: никогда, редко, иногда, часто или всегда. Отвечайте так, как обычно бывает, а не как хотелось бы. Результат посчитается автоматически.</p>
+      <p class="lead">По результатам вы увидите свои сильные стороны и получите рекомендации, упражнения и книги для развития навыков, которым стоит уделить внимание.</p>
+
+      <div class="howto">
+        <h2>Как пройти</h2>
+        <p>Для каждого из 20 утверждений выберите один ответ: никогда, редко, иногда, часто или всегда.</p>
+        <p>Отвечайте так, как обычно бывает, а не как хотелось бы. Здесь нет правильных или неправильных ответов. Результат рассчитается автоматически.</p>
+      </div>
       <button class="btn" id="btn-start" type="button">Начать <span class="arr">→</span></button>
     </section>
 
@@ -556,41 +553,6 @@
       </div>
 
       <div class="block">
-        <h3>Что почитать дальше</h3>
-        <ul class="reading">
-          <li><b>Library of Ambiguity</b><p>Статьи, книги и упражнения о том, как мы воспринимаем неопределённость, реагируем на неизвестность и учимся действовать без готовых ответов. Её собрали авторы теста: <a href="https://dlibrary.stanford.edu/ambiguity" target="_blank" rel="noopener">dlibrary.stanford.edu/ambiguity</a></p></li>
-          <li><b>Ambiguity Archetypes</b><p>Авторы выделили три подхода на основе метафор примерно 150 участников образовательных программ: стремление поскорее преодолеть неопределённость (Endure), готовность взаимодействовать с ней (Engage) и принятие её как возможности для открытий (Embrace).</p></li>
-          <li><b>Ханс Рослинг, «Фактологичность»</b><p>О десяти когнитивных ловушках, из-за которых мир кажется хуже, чем он есть.</p></li>
-          <li><b>Билл Бернетт и Дэйв Эванс, «Дизайн вашей жизни»</b><p>Инструменты дизайн-мышления для важных жизненных решений.</p></li>
-        </ul>
-      </div>
-
-      <div class="block">
-        <h3>Опубликованные авторами ориентировочные диапазоны</h3>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Шкала</th><th>Низкий</th><th>Средний</th><th>Высокий</th></tr></thead>
-            <tbody id="ranges"></tbody>
-          </table>
-        </div>
-        <p class="fine">Примечание: в Table 2 статьи нижние диапазоны начинаются с 0. При шкале 1–5 фактический минимум составляет 10 для каждой из двух шкал и 20 для Total. Здесь диапазоны воспроизведены так, как опубликованы авторами.</p>
-      </div>
-
-      <div class="block">
-        <h3>Как посчитан результат</h3>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Шкала</th><th>Подсчёт</th><th>Ваш балл</th></tr></thead>
-            <tbody>
-              <tr><td>Отношение к неопределённости (1–10)</td><td>Обратный подсчёт: Никогда = 5 · Редко = 4 · Иногда = 3 · Часто = 2 · Всегда = 1</td><td class="cur" id="c-att"></td></tr>
-              <tr><td>Действия в условиях неопределённости (11–20)</td><td>Обычный подсчёт: Никогда = 1 · Редко = 2 · Иногда = 3 · Часто = 4 · Всегда = 5</td><td class="cur" id="c-act"></td></tr>
-              <tr><td>Общий результат</td><td>Сумма двух шкал</td><td class="cur" id="c-total"></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="block">
         <h3>Важно</h3>
         <p class="important">DANI — инструмент самооценки, и это создаёт определённые ограничения в его достоверности и валидности. Он показывает скорее общую тенденцию, но <b>не ставит никаких диагнозов.</b> Авторы теста продолжают работать над его улучшением и соответствием всем научным критериям.</p>
       </div>
@@ -603,7 +565,7 @@
   </main>
 
   <footer>
-    Источник: Britos Cavagnaro et al., “Assessing the ability to navigate ambiguity: An essential skill for imagining possible futures”, Possibility Studies &amp; Society. Русский текст — перевод и редакционная адаптация оригинального DANI.
+    Источник: Britos Cavagnaro et al., “Assessing the ability to navigate ambiguity: An essential skill for imagining possible futures”, Possibility Studies &amp; Society.
   </footer>
 </div>
 
@@ -778,12 +740,35 @@
       '<span class="pin" data-pos="' + ((v - r.min) / span * 100) + '"></span></div></div>';
   }
 
-  function recsHTML(k) {
-    var c = COMBOS[k];
+  // Общие материалы для всех результатов
+  var LIB = { t: "Library of Ambiguity", url: "https://dlibrary.stanford.edu/ambiguity",
+    d: "Статьи, книги и упражнения о том, как мы воспринимаем неопределённость, реагируем на неизвестность и учимся действовать без готовых ответов. Её собрали авторы теста." };
+  var COMMON = [
+    { t: "Ambiguity Archetypes", d: "Авторы выделили три подхода на основе метафор примерно 150 участников образовательных программ: стремление поскорее преодолеть неопределённость (Endure), готовность взаимодействовать с ней (Engage) и принятие её как возможности для открытий (Embrace)." },
+    { t: "Ханс Рослинг, «Фактологичность»", d: "О десяти когнитивных ловушках, из-за которых мир кажется хуже, чем он есть.", book: true },
+    { t: "Билл Бернетт и Дэйв Эванс, «Дизайн вашей жизни»", d: "Инструменты дизайн-мышления для важных жизненных решений.", book: true }
+  ];
+
+  function libHTML() {
+    return '<div class="lib"><div><div class="rt">' + LIB.t + "</div><p>" + LIB.d + '</p></div><a class="btn" href="' + LIB.url + '" target="_blank" rel="noopener">Открыть библиотеку <span class="arr">→</span></a></div>';
+  }
+  function tryHTML(k) {
     return '<div class="rec-group"><h4>Попробуйте</h4><div class="rec-list">' +
-      c.tries.map(function (id) { return '<div class="rec rec--try"><div class="rt">' + TRY[id].t + "</div><p>" + TRY[id].d + "</p></div>"; }).join("") +
-      '</div></div><div class="rec-group"><h4>Почитайте</h4><div class="rec rec--book"><span class="book" aria-hidden="true"></span><div><div class="rt">' +
-      c.book.t + "</div><p>" + c.book.d + "</p></div></div></div>";
+      COMBOS[k].tries.map(function (id) { return '<div class="rec rec--try"><div class="rt">' + TRY[id].t + "</div><p>" + TRY[id].d + "</p></div>"; }).join("") + "</div></div>";
+  }
+  function itemHTML(it, tag) {
+    return it.book
+      ? '<div class="rec rec--book"><span class="book" aria-hidden="true"></span><div>' + (tag ? '<div class="tag">' + tag + "</div>" : "") + '<div class="rt">' + it.t + "</div><p>" + it.d + "</p></div></div>"
+      : '<div class="rec rec--try"><div class="rt">' + it.t + "</div><p>" + it.d + "</p></div>";
+  }
+  function readHTML(keys) {
+    var own = keys.length === 1 ? itemHTML({ t: COMBOS[keys[0]].book.t, d: COMBOS[keys[0]].book.d, book: true }, "Под ваш результат") : "";
+    return '<div class="rec-group"><h4>Почитайте</h4><div class="rec-list rec-list--books">' + own + COMMON.map(function (it) { return itemHTML(it); }).join("") + "</div></div>";
+  }
+  // для раскрывающихся карточек среднего диапазона
+  function recsHTML(k) {
+    return tryHTML(k) + '<div class="rec-group"><h4>Почитайте</h4><div class="rec-list rec-list--books">' +
+      itemHTML({ t: COMBOS[k].book.t, d: COMBOS[k].book.d, book: true }) + "</div></div>";
   }
 
   function lvlWord(l) { return LVL_NAME[l].toLowerCase(); }
@@ -808,7 +793,7 @@
       $("r-desc").textContent = combo.text;
       $("r-orb").setAttribute("data-palette", combo.palette);
       $("recs-title").textContent = "Что дальше";
-      $("recs").innerHTML = recsHTML(keys[0]);
+      $("recs").innerHTML = libHTML() + tryHTML(keys[0]) + readHTML(keys);
     } else {
       var both = la === "mid" && lc === "mid";
       var which = la === "mid" ? "«Отношение к неопределённости»" : "«Действия в условиях неопределённости»";
@@ -818,12 +803,12 @@
         ? "Ваши результаты по обеим шкалам находятся в среднем диапазоне. Поэтому мы показываем все четыре сочетания низких и высоких значений, но не относим ваш результат однозначно ни к одному из них."
         : "Ваш результат по шкале " + which + " находится в среднем диапазоне. Поэтому мы показываем два сочетания низких и высоких значений, но не относим ваш результат однозначно ни к одному из них.";
       $("r-orb").setAttribute("data-palette", la === "low" ? "sun" : la === "high" ? "sky" : lc === "low" ? "dusk" : "fire");
-      $("recs-title").textContent = "Что попробовать: сочетания рядом с вашим результатом";
-      $("recs").innerHTML = keys.map(function (k, i) {
+      $("recs-title").textContent = "Что дальше";
+      $("recs").innerHTML = libHTML() + '<div class="rec-group"><h4>Под сочетания рядом с вашим результатом</h4><div class="acc-wrap">' + keys.map(function (k, i) {
         var c = COMBOS[k];
         return '<details class="acc"' + (i === 0 ? " open" : "") + '><summary><span>Результат ' + c.n + ". " + c.name + "<small>" + c.sub + '</small></span><span class="plus">+</span></summary>' +
           '<div class="acc-body"><p>' + c.text + "</p>" + recsHTML(k) + "</div></details>";
-      }).join("");
+      }).join("") + "</div></div>" + readHTML(keys);
     }
     $("r-sub").textContent = "Отношение к неопределённости — " + att + " из 50 (" + lvlWord(la) + "), действия в условиях неопределённости — " + act + " из 50 (" + lvlWord(lc) + "), общий результат — " + total + " из 100 (" + lvlWord(lt) + ").";
 
@@ -834,14 +819,6 @@
       return '<div class="combo' + (keys.indexOf(k) > -1 ? " on" : "") + '"><h4>Результат ' + c.n + ". " + c.name + "</h4><p>" + c.text + "</p></div>";
     }).join("");
     document.querySelectorAll("#map .q").forEach(function (q) { q.classList.toggle("on", keys.indexOf(q.getAttribute("data-k")) > -1); });
-
-    $("ranges").innerHTML = ["att", "act", "total"].map(function (k) {
-      var r = RANGES[k], l = last[k === "att" ? "la" : k === "act" ? "lc" : "lt"];
-      return "<tr><td>" + r.name + "</td>" + ["low", "mid", "high"].map(function (z) {
-        return '<td class="' + (z === l ? "cur" : "") + '">' + r[z][0] + "–" + r[z][1] + "</td>";
-      }).join("") + "</tr>";
-    }).join("");
-    $("c-att").textContent = att; $("c-act").textContent = act; $("c-total").textContent = total;
 
     show("result");
 
