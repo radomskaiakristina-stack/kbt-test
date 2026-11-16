@@ -524,10 +524,7 @@
       <p class="desc" id="r-desc"></p>
       <p class="sub" id="r-sub"></p>
 
-      <div class="block">
-        <h3 id="recs-title">Попробуйте</h3>
-        <div class="recs" id="recs"></div>
-      </div>
+      <div class="recs" id="recs"></div>
 
       <div class="block">
         <h3>Ваши баллы</h3>
@@ -749,12 +746,13 @@
     { t: "Билл Бернетт и Дэйв Эванс, «Дизайн вашей жизни»", d: "Инструменты дизайн-мышления для важных жизненных решений.", book: true }
   ];
 
+  function blockHTML(title, inner) { return '<div class="block"><h3>' + title + "</h3>" + inner + "</div>"; }
   function libHTML() {
     return '<div class="lib"><div><div class="rt">' + LIB.t + "</div><p>" + LIB.d + '</p></div><a class="btn" href="' + LIB.url + '" target="_blank" rel="noopener">Открыть библиотеку <span class="arr">→</span></a></div>';
   }
   function tryHTML(k) {
-    return '<div class="rec-group"><h4>Попробуйте</h4><div class="rec-list">' +
-      COMBOS[k].tries.map(function (id) { return '<div class="rec rec--try"><div class="rt">' + TRY[id].t + "</div><p>" + TRY[id].d + "</p></div>"; }).join("") + "</div></div>";
+    return '<div class="rec-list">' +
+      COMBOS[k].tries.map(function (id) { return '<div class="rec rec--try"><div class="rt">' + TRY[id].t + "</div><p>" + TRY[id].d + "</p></div>"; }).join("") + "</div>";
   }
   function itemHTML(it, tag) {
     return it.book
@@ -763,11 +761,11 @@
   }
   function readHTML(keys) {
     var own = keys.length === 1 ? itemHTML({ t: COMBOS[keys[0]].book.t, d: COMBOS[keys[0]].book.d, book: true }, "Под ваш результат") : "";
-    return '<div class="rec-group"><h4>Почитайте</h4><div class="rec-list rec-list--books">' + own + COMMON.map(function (it) { return itemHTML(it); }).join("") + "</div></div>";
+    return '<div class="rec-list rec-list--books">' + own + COMMON.map(function (it) { return itemHTML(it); }).join("") + "</div>";
   }
   // для раскрывающихся карточек среднего диапазона
   function recsHTML(k) {
-    return tryHTML(k) + '<div class="rec-group"><h4>Почитайте</h4><div class="rec-list rec-list--books">' +
+    return '<div class="rec-group"><h4>Попробуйте</h4>' + tryHTML(k) + '</div><div class="rec-group"><h4>Почитайте</h4><div class="rec-list rec-list--books">' +
       itemHTML({ t: COMBOS[k].book.t, d: COMBOS[k].book.d, book: true }) + "</div></div>";
   }
 
@@ -792,8 +790,7 @@
       $("r-title").textContent = combo.name;
       $("r-desc").textContent = combo.text;
       $("r-orb").setAttribute("data-palette", combo.palette);
-      $("recs-title").textContent = "Что дальше";
-      $("recs").innerHTML = libHTML() + tryHTML(keys[0]) + readHTML(keys);
+      $("recs").innerHTML = blockHTML("Что попробовать", tryHTML(keys[0])) + blockHTML("Что почитать", readHTML(keys)) + blockHTML("Что дальше", libHTML());
     } else {
       var both = la === "mid" && lc === "mid";
       var which = la === "mid" ? "«Отношение к неопределённости»" : "«Действия в условиях неопределённости»";
@@ -803,12 +800,11 @@
         ? "Ваши результаты по обеим шкалам находятся в среднем диапазоне. Поэтому мы показываем все четыре сочетания низких и высоких значений, но не относим ваш результат однозначно ни к одному из них."
         : "Ваш результат по шкале " + which + " находится в среднем диапазоне. Поэтому мы показываем два сочетания низких и высоких значений, но не относим ваш результат однозначно ни к одному из них.";
       $("r-orb").setAttribute("data-palette", la === "low" ? "sun" : la === "high" ? "sky" : lc === "low" ? "dusk" : "fire");
-      $("recs-title").textContent = "Что дальше";
-      $("recs").innerHTML = libHTML() + '<div class="rec-group"><h4>Под сочетания рядом с вашим результатом</h4><div class="acc-wrap">' + keys.map(function (k, i) {
+      $("recs").innerHTML = blockHTML("Что попробовать и почитать под сочетания рядом с вашим результатом", '<div class="acc-wrap">' + keys.map(function (k, i) {
         var c = COMBOS[k];
         return '<details class="acc"' + (i === 0 ? " open" : "") + '><summary><span>Результат ' + c.n + ". " + c.name + "<small>" + c.sub + '</small></span><span class="plus">+</span></summary>' +
           '<div class="acc-body"><p>' + c.text + "</p>" + recsHTML(k) + "</div></details>";
-      }).join("") + "</div></div>" + readHTML(keys);
+      }).join("") + "</div>") + blockHTML("Что почитать", readHTML(keys)) + blockHTML("Что дальше", libHTML());
     }
     $("r-sub").textContent = "Отношение к неопределённости — " + att + " из 50 (" + lvlWord(la) + "), действия в условиях неопределённости — " + act + " из 50 (" + lvlWord(lc) + "), общий результат — " + total + " из 100 (" + lvlWord(lt) + ").";
 
