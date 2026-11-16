@@ -192,6 +192,7 @@
   .lib .rt { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
   .lib p { margin: 0; font-size: 14.5px; color: var(--soft); max-width: 56ch; }
   .lib .btn { padding: 12px 20px; font-size: 14px; }
+  .lib-url { color: var(--yellow); text-decoration: none; border-bottom: 1px solid rgba(255,214,107,.4); white-space: nowrap; }
   .rec-list--books { grid-template-columns: 1fr; }
   .rec--book .tag { display: inline-block; font-size: 11px; font-weight: 700; color: var(--yellow); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 4px; }
   .acc-wrap { margin-bottom: 26px; }
@@ -500,7 +501,7 @@
       <ul class="options" id="options" role="group" aria-labelledby="q-text"></ul>
       <div class="nav">
         <button class="btn btn--ghost" id="btn-back" type="button">← Назад</button>
-        <div class="hint">1–5 — выбрать ответ · Enter — дальше</div>
+        <div class="hint">Выберите ответ — следующий вопрос откроется сам<br>1–5 на клавиатуре тоже работают</div>
         <button class="btn" id="btn-next" type="button" disabled>Дальше <span class="arr">→</span></button>
       </div>
     </section>
@@ -707,14 +708,19 @@
       b.setAttribute("aria-pressed", j === i ? "true" : "false");
     });
     $("btn-next").disabled = false;
-    $("btn-next").focus({ preventScroll: true });
+    // Автопереход: выбор успевает подсветиться, потом следующий вопрос
+    clearTimeout(advanceTimer);
+    var at = idx;
+    advanceTimer = setTimeout(function () { if (at === idx && !screens.quiz.hidden) next(); }, reduce ? 150 : 420);
   }
+  var advanceTimer = null;
 
   function next() {
+    clearTimeout(advanceTimer);
     if (answers[idx] === null) return;
     if (idx < QUESTIONS.length - 1) { idx++; renderQuestion(); } else { renderResult(); }
   }
-  function back() { if (idx > 0) { idx--; renderQuestion(); } }
+  function back() { clearTimeout(advanceTimer); if (idx > 0) { idx--; renderQuestion(); } }
 
   // Attitude — обратный подсчёт, Actions — обычный
   function points(i) { var a = answers[i]; if (a === null) return 0; return QUESTIONS[i].s === "att" ? 5 - a : a + 1; }
@@ -739,7 +745,7 @@
 
   // Общие материалы для всех результатов
   var LIB = { t: "Library of Ambiguity", url: "https://dlibrary.stanford.edu/ambiguity",
-    d: "Статьи, книги и упражнения о том, как мы воспринимаем неопределённость, реагируем на неизвестность и учимся действовать без готовых ответов. Её собрали авторы теста." };
+    d: "Статьи, книги и упражнения о том, как мы воспринимаем неопределённость, реагируем на неизвестность и учимся действовать без готовых ответов. Её собрали авторы теста:" };
   var COMMON = [
     { t: "Ambiguity Archetypes", d: "Авторы выделили три подхода на основе метафор примерно 150 участников образовательных программ: стремление поскорее преодолеть неопределённость (Endure), готовность взаимодействовать с ней (Engage) и принятие её как возможности для открытий (Embrace)." },
     { t: "Ханс Рослинг, «Фактологичность»", d: "О десяти когнитивных ловушках, из-за которых мир кажется хуже, чем он есть.", book: true },
@@ -748,7 +754,7 @@
 
   function blockHTML(title, inner) { return '<div class="block"><h3>' + title + "</h3>" + inner + "</div>"; }
   function libHTML() {
-    return '<div class="lib"><div><div class="rt">' + LIB.t + "</div><p>" + LIB.d + '</p></div><a class="btn" href="' + LIB.url + '" target="_blank" rel="noopener">Открыть библиотеку <span class="arr">→</span></a></div>';
+    return '<div class="lib"><div><div class="rt">' + LIB.t + "</div><p>" + LIB.d + ' <a class="lib-url" href="' + LIB.url + '" target="_blank" rel="noopener">dlibrary.stanford.edu/ambiguity</a></p></div><a class="btn" href="' + LIB.url + '" target="_blank" rel="noopener">Открыть библиотеку <span class="arr">→</span></a></div>';
   }
   function tryHTML(k) {
     return '<div class="rec-list">' +
@@ -760,8 +766,10 @@
       : '<div class="rec rec--try"><div class="rt">' + it.t + "</div><p>" + it.d + "</p></div>";
   }
   function readHTML(keys) {
-    var own = keys.length === 1 ? itemHTML({ t: COMBOS[keys[0]].book.t, d: COMBOS[keys[0]].book.d, book: true }, "Под ваш результат") : "";
-    return '<div class="rec-list rec-list--books">' + own + COMMON.map(function (it) { return itemHTML(it); }).join("") + "</div>";
+    return '<div class="rec-list rec-list--books">' + itemHTML({ t: COMBOS[keys[0]].book.t, d: COMBOS[keys[0]].book.d, book: true }) + "</div>";
+  }
+  function commonHTML() {
+    return libHTML() + '<div class="rec-list rec-list--books">' + COMMON.map(function (it) { return itemHTML(it); }).join("") + "</div>";
   }
   // для раскрывающихся карточек среднего диапазона
   function recsHTML(k) {
@@ -790,7 +798,7 @@
       $("r-title").textContent = combo.name;
       $("r-desc").textContent = combo.text;
       $("r-orb").setAttribute("data-palette", combo.palette);
-      $("recs").innerHTML = blockHTML("Что попробовать", tryHTML(keys[0])) + blockHTML("Что почитать", readHTML(keys)) + blockHTML("Что дальше", libHTML());
+      $("recs").innerHTML = blockHTML("Попробуйте", tryHTML(keys[0])) + blockHTML("Почитайте", readHTML(keys)) + blockHTML("Общие рекомендации", commonHTML());
     } else {
       var both = la === "mid" && lc === "mid";
       var which = la === "mid" ? "«Отношение к неопределённости»" : "«Действия в условиях неопределённости»";
@@ -800,11 +808,11 @@
         ? "Ваши результаты по обеим шкалам находятся в среднем диапазоне. Поэтому мы показываем все четыре сочетания низких и высоких значений, но не относим ваш результат однозначно ни к одному из них."
         : "Ваш результат по шкале " + which + " находится в среднем диапазоне. Поэтому мы показываем два сочетания низких и высоких значений, но не относим ваш результат однозначно ни к одному из них.";
       $("r-orb").setAttribute("data-palette", la === "low" ? "sun" : la === "high" ? "sky" : lc === "low" ? "dusk" : "fire");
-      $("recs").innerHTML = blockHTML("Что попробовать и почитать под сочетания рядом с вашим результатом", '<div class="acc-wrap">' + keys.map(function (k, i) {
+      $("recs").innerHTML = blockHTML("Попробуйте и почитайте: сочетания рядом с вашим результатом", '<div class="acc-wrap">' + keys.map(function (k, i) {
         var c = COMBOS[k];
         return '<details class="acc"' + (i === 0 ? " open" : "") + '><summary><span>Результат ' + c.n + ". " + c.name + "<small>" + c.sub + '</small></span><span class="plus">+</span></summary>' +
           '<div class="acc-body"><p>' + c.text + "</p>" + recsHTML(k) + "</div></details>";
-      }).join("") + "</div>") + blockHTML("Что почитать", readHTML(keys)) + blockHTML("Что дальше", libHTML());
+      }).join("") + "</div>") + blockHTML("Общие рекомендации", commonHTML());
     }
     $("r-sub").textContent = "Отношение к неопределённости — " + att + " из 50 (" + lvlWord(la) + "), действия в условиях неопределённости — " + act + " из 50 (" + lvlWord(lc) + "), общий результат — " + total + " из 100 (" + lvlWord(lt) + ").";
 
