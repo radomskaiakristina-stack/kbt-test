@@ -31,6 +31,12 @@
     --sky: #5BC4EE;
     --font: "Manrope", "Helvetica Neue", Arial, sans-serif;
     --ease: cubic-bezier(.2,.7,.2,1);
+    --w: 1180px;
+    --coral2: #F5502A;
+    --peach: #FCC86B;
+    --lilac: #C0BEF8;
+    --teal: #2CC9B5;
+    --orchid: #E3A0E8;
   }
   * { box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; }
@@ -43,7 +49,7 @@
     line-height: 1.55;
     font-weight: 500;
     -webkit-font-smoothing: antialiased;
-    background: linear-gradient(125deg, var(--navy) 0%, var(--night) 48%, var(--pine) 100%) fixed;
+    background: radial-gradient(120% 90% at 85% 0%, #14457F 0%, #0B2A5A 32%, #061638 62%, #020617 100%) fixed;
     background-color: var(--night);
     overflow-x: hidden;
   }
@@ -56,16 +62,16 @@
     position: absolute; border-radius: 50%; filter: blur(90px); opacity: .35;
     animation: drift 26s var(--ease) infinite alternate;
   }
-  .ambient i:nth-child(1) { width: 46vw; height: 46vw; left: -14vw; top: -18vw; background: var(--lav); opacity: .18; }
-  .ambient i:nth-child(2) { width: 38vw; height: 38vw; right: -12vw; bottom: -14vw; background: var(--orange); opacity: .14; animation-duration: 32s; }
-  .ambient i:nth-child(3) { width: 26vw; height: 26vw; right: 18vw; top: 30vh; background: var(--mint); opacity: .07; animation-duration: 38s; }
+  .ambient i:nth-child(1) { width: 46vw; height: 46vw; left: -14vw; top: -18vw; background: var(--lilac); opacity: .22; }
+  .ambient i:nth-child(2) { width: 40vw; height: 40vw; right: -12vw; bottom: -14vw; background: var(--coral2); opacity: .22; animation-duration: 32s; }
+  .ambient i:nth-child(3) { width: 28vw; height: 28vw; right: 22vw; top: 30vh; background: var(--peach); opacity: .12; animation-duration: 38s; }
   @keyframes drift { from { transform: translate(0,0) scale(1); } to { transform: translate(4vw, 3vh) scale(1.12); } }
 
   .app { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; }
 
   .topbar {
-    width: 100%; max-width: 880px; margin: 0 auto;
-    padding: 22px 24px 8px;
+    width: 100%; max-width: var(--w); margin: 0 auto;
+    padding: 22px 32px 8px;
     display: flex; align-items: center; justify-content: space-between; gap: 16px;
     font-size: 13px; color: var(--soft); letter-spacing: .01em;
   }
@@ -74,7 +80,7 @@
   .counter { font-variant-numeric: tabular-nums; color: var(--muted); }
   .counter b { color: var(--text); font-weight: 600; }
 
-  main { flex: 1; width: 100%; max-width: 880px; margin: 0 auto; padding: 12px 24px 48px; }
+  main { flex: 1; width: 100%; max-width: var(--w); margin: 0 auto; padding: 12px 32px 56px; }
 
   /* ---------- Visual frames from the moodboard ---------- */
   .frame {
@@ -351,7 +357,7 @@
   .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
 
   footer {
-    width: 100%; max-width: 880px; margin: 0 auto; padding: 18px 24px 30px;
+    width: 100%; max-width: var(--w); margin: 0 auto; padding: 18px 32px 30px;
     font-size: 12px; color: var(--muted); line-height: 1.6;
   }
 
@@ -427,7 +433,84 @@
   .meter-val.done b { animation: glow 1s var(--ease) 1; display: inline-block; }
   .meter-val b { font-weight: 800; }
 
+  /* ===== Colour & wide layout ===== */
+  .backdrop { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: center / cover no-repeat; opacity: 0; transition: opacity 1.2s var(--ease); }
+  .backdrop--quiz { background-image: url(img/stars.webp); }
+  .backdrop--result { background-image: url(img/star.webp); }
+  body[data-screen="quiz"] .backdrop--quiz { opacity: .32; }
+  body[data-screen="result"] .backdrop--result { opacity: .28; }
+
+  .hero { position: relative; overflow: hidden; border-radius: 6px; min-height: 560px; display: flex; align-items: center; background: #0A2550; margin: 8px 0 44px; isolation: isolate; }
+  .hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 70% center; z-index: -2; animation: heroIn 1.8s var(--ease) both, heroFloat 14s ease-in-out 1.8s infinite alternate; }
+  .hero::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(2,6,23,.82) 0%, rgba(2,6,23,.45) 42%, rgba(2,6,23,0) 68%); }
+  @keyframes heroIn { from { opacity: 0; transform: scale(1.08); } to { opacity: 1; transform: none; } }
+  @keyframes heroFloat { from { transform: scale(1); } to { transform: scale(1.04) translateX(-1%); } }
+  .hero-text { padding: 56px; max-width: 640px; }
+  .hero-text h1 { margin-bottom: 20px; }
+  .hero-text .lead { margin-bottom: 28px; color: var(--text); }
+  .kicker { display: inline-block; font-size: 13px; font-weight: 700; color: var(--night); background: linear-gradient(90deg, var(--lilac), var(--peach)); border-radius: 999px; padding: 5px 13px; margin-bottom: 20px; }
+
+  .about { display: grid; grid-template-columns: 1.05fr 1fr; gap: 44px; align-items: start; }
+  .about .lead { margin-top: 0; }
+  .about .scales { grid-template-columns: 1fr; margin: 0; }
+  .scale-card { border: 0 !important; color: var(--night); padding: 22px 24px; border-radius: 6px; }
+  .scale-card:nth-child(1) { background: linear-gradient(120deg, #C0BEF8 0%, #D9B3F0 55%, #F2C6DE 100%); }
+  .scale-card:nth-child(2) { background: linear-gradient(120deg, #FCC86B 0%, #F98B4E 55%, #F5502A 100%); }
+  .scale-card .k { color: rgba(3,6,26,.6); }
+  .scale-card p { color: rgba(3,6,26,.82); }
+
+  .band { display: block; width: 100%; height: auto; max-height: 230px; object-fit: contain; object-position: right center; margin: 26px 0 10px; animation: bandIn 1.6s var(--ease) both; }
+  @keyframes bandIn { from { opacity: 0; transform: translateX(4%); } to { opacity: 1; transform: none; } }
+
+  .howto { display: grid; grid-template-columns: 1fr auto; gap: 28px; align-items: center; max-width: none; margin: 18px 0 8px; padding: 30px 34px; border-radius: 6px;
+    border: 1px solid rgba(255,255,255,.18); background: linear-gradient(115deg, rgba(192,190,248,.20), rgba(227,160,232,.12) 40%, rgba(245,80,42,.16) 75%, rgba(252,200,107,.20)); }
+  .howto h2 { font-size: 24px; }
+  .howto p { color: var(--text); }
+
+  .quiz { max-width: 1040px; margin: 0 auto; }
+  .opt { background: rgba(6,18,48,.55); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+
+  .r-head { display: grid; grid-template-columns: 1.1fr 1fr; gap: 44px; align-items: center; margin-bottom: 8px; }
+  .r-head .result-frame { margin: 0; aspect-ratio: 4 / 3; }
+  .r-head .desc { font-size: 19px; }
+
+  .block > h3 { color: var(--peach); font-size: 14px; }
+  .rec-list .rec--try:nth-child(1) { background: linear-gradient(140deg, rgba(192,190,248,.24), rgba(192,190,248,.05)); border-color: rgba(192,190,248,.45); }
+  .rec-list .rec--try:nth-child(2) { background: linear-gradient(140deg, rgba(245,80,42,.22), rgba(252,200,107,.06)); border-color: rgba(249,139,78,.45); }
+  .rec-list .rec--try:nth-child(2)::before { background: linear-gradient(var(--coral2), var(--peach)); }
+  .rec--book { background: linear-gradient(140deg, rgba(252,200,107,.16), rgba(255,255,255,.03)); border-color: rgba(252,200,107,.35); }
+  .rec-list.rec-list--common { grid-template-columns: repeat(3, 1fr); }
+
+  .lib { position: relative; overflow: hidden; min-height: 230px; padding: 30px 34px; border: 0; color: var(--text);
+    background: linear-gradient(110deg, #142F6B 0%, #2B2F7E 55%, #432A73 100%); }
+  .lib > div, .lib > .btn { position: relative; z-index: 1; }
+  .lib > div { max-width: 58%; }
+  .lib p { color: #E4E2FA; }
+  .lib-img { position: absolute; right: -30px; top: 50%; width: 360px; transform: translateY(-50%) rotate(-6deg); z-index: 0; pointer-events: none; filter: saturate(1.1); animation: libGlow 6s ease-in-out infinite alternate; }
+  @keyframes libGlow { from { opacity: .85; } to { opacity: 1; transform: translateY(-52%) rotate(-3deg); } }
+  .lib .btn { align-self: end; }
+
+  @media (min-width: 980px) {
+    h2.q-text { font-size: 42px; }
+    .opt { min-height: 116px; }
+  }
+  @media (max-width: 980px) {
+    .about, .r-head { grid-template-columns: 1fr; gap: 26px; }
+    .rec-list.rec-list--common { grid-template-columns: 1fr 1fr; }
+    .lib > div { max-width: 62%; }
+  }
+
   @media (max-width: 720px) {
+    .hero { flex-direction: column; align-items: stretch; min-height: 0; }
+    .hero-img { position: relative; height: 280px; object-position: 82% 30%; z-index: 0; }
+    .hero::before { display: none; }
+    .hero-text { padding: 22px 20px 28px; }
+    .howto { grid-template-columns: 1fr; padding: 24px 20px; }
+    .howto .btn { justify-self: start; }
+    .rec-list.rec-list--common { grid-template-columns: 1fr; }
+    .lib { padding: 24px 20px 180px; }
+    .lib > div { max-width: none; }
+    .lib-img { top: auto; bottom: -70px; right: -20px; width: 240px; transform: rotate(-6deg); animation: none; }
     .options { grid-template-columns: 1fr; gap: 8px; }
     .opt { min-height: 0; flex-direction: row; align-items: center; justify-content: flex-start; gap: 14px; padding: 14px 16px; }
     .opt .n { width: 14px; }
@@ -443,6 +526,8 @@
   }
   @media (max-width: 520px) {
     .topbar, main, footer { padding-left: 16px; padding-right: 16px; }
+    .hero-img { height: 230px; }
+    h1 { font-size: 28px; }
     .lead, .result .desc { font-size: 16.5px; }
     .note { font-size: 13px; }
   }
@@ -453,6 +538,8 @@
 </head>
 <body>
 <div class="ambient" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="backdrop backdrop--quiz" aria-hidden="true"></div>
+<div class="backdrop backdrop--result" aria-hidden="true"></div>
 
 <div class="app">
   <div class="topbar">
@@ -466,28 +553,37 @@
   <main>
     <!-- Start -->
     <section class="screen" id="screen-start">
-      <div class="frame frame--night hero-frame" aria-hidden="true">
-        <div class="beam-wrap"><div class="beam"></div></div><div class="beam-wrap beam-wrap--core"><div class="beam"></div></div>
-        <svg class="star" viewBox="0 0 24 24"><path d="M12 0c.9 6.4 2.6 9.1 12 12-9.4 2.9-11.1 5.6-12 12-.9-6.4-2.6-9.1-12-12C9.4 9.1 11.1 6.4 12 0z" fill="#C9C5FF" transform="rotate(14 12 12)"/></svg>
+      <div class="hero">
+        <img class="hero-img" src="img/person.webp" alt="" aria-hidden="true">
+        <div class="hero-text">
+          <span class="kicker">Тест · 20 утверждений</span>
+          <h1>DANI: как вы работаете с <span>неопределённостью?</span></h1>
+          <p class="lead">Чем больше ответственность, тем чаще приходится принимать решения без единственного правильного ответа. Данных не хватает, планы меняются, а команда ждёт от вас ясности. Навыки работы с неопределённостью можно развивать — и начать стоит с понимания того, как вы обычно реагируете и действуете в таких ситуациях.</p>
+          <button class="btn js-start" type="button">Начать <span class="arr">→</span></button>
+        </div>
       </div>
 
-      <h1>DANI: как вы работаете с <span>неопределённостью?</span></h1>
-      <p class="lead">Чем больше ответственность, тем чаще приходится принимать решения без единственного правильного ответа. Данных не хватает, планы меняются, а команда ждёт от вас ясности. Навыки работы с неопределённостью можно развивать — и начать стоит с понимания того, как вы обычно реагируете и действуете в таких ситуациях.</p>
-      <p class="lead">Этот тест — русская адаптация d.school Ambiguity Navigation Instrument (DANI), опросника самооценки, разработанного в Стэнфордской школе дизайна d.school. Он рассматривает две стороны работы с неопределённостью:</p>
-
-      <div class="scales">
-        <div class="scale-card"><div class="k">Утверждения 1–10</div><div class="t">Отношение</div><p>Как вы воспринимаете ситуации, в которых нет ясности и готового ответа.</p></div>
-        <div class="scale-card"><div class="k">Утверждения 11–20</div><div class="t">Действия</div><p>Что вы предпринимаете, чтобы разобраться в ситуации и двигаться вперёд.</p></div>
+      <div class="about">
+        <div>
+          <p class="lead">Этот тест — русская адаптация d.school Ambiguity Navigation Instrument (DANI), опросника самооценки, разработанного в Стэнфордской школе дизайна d.school. Он рассматривает две стороны работы с неопределённостью:</p>
+          <p class="lead">По результатам вы увидите свои сильные стороны и получите рекомендации, упражнения и книги для развития навыков, которым стоит уделить внимание.</p>
+        </div>
+        <div class="scales">
+          <div class="scale-card"><div class="k">Утверждения 1–10</div><div class="t">Отношение</div><p>Как вы воспринимаете ситуации, в которых нет ясности и готового ответа.</p></div>
+          <div class="scale-card"><div class="k">Утверждения 11–20</div><div class="t">Действия</div><p>Что вы предпринимаете, чтобы разобраться в ситуации и двигаться вперёд.</p></div>
+        </div>
       </div>
 
-      <p class="lead">По результатам вы увидите свои сильные стороны и получите рекомендации, упражнения и книги для развития навыков, которым стоит уделить внимание.</p>
+      <img class="band" src="img/lighthouse.webp" alt="" aria-hidden="true">
 
       <div class="howto">
-        <h2>Как пройти</h2>
-        <p>Для каждого из 20 утверждений выберите один ответ: никогда, редко, иногда, часто или всегда.</p>
-        <p>Отвечайте так, как обычно бывает, а не как хотелось бы. Здесь нет правильных или неправильных ответов. Результат рассчитается автоматически.</p>
+        <div>
+          <h2>Как пройти</h2>
+          <p>Для каждого из 20 утверждений выберите один ответ: никогда, редко, иногда, часто или всегда.</p>
+          <p>Отвечайте так, как обычно бывает, а не как хотелось бы. Здесь нет правильных или неправильных ответов. Результат рассчитается автоматически.</p>
+        </div>
+        <button class="btn" id="btn-start" type="button">Начать <span class="arr">→</span></button>
       </div>
-      <button class="btn" id="btn-start" type="button">Начать <span class="arr">→</span></button>
     </section>
 
     <!-- Quiz -->
@@ -508,6 +604,7 @@
 
     <!-- Result -->
     <section class="screen result" id="screen-result" hidden>
+      <div class="r-head">
       <div class="frame result-frame">
         <div class="orb" id="r-orb" data-palette="sun" aria-hidden="true"><i class="o1"></i><i class="o2"></i><i class="o3"></i><i class="o4"></i></div>
         <div class="total">
@@ -520,10 +617,13 @@
         <svg class="sparkle" style="left:46%;top:56%;width:14px;height:14px" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.9 6.4 2.6 9.1 12 12-9.4 2.9-11.1 5.6-12 12-.9-6.4-2.6-9.1-12-12C9.4 9.1 11.1 6.4 12 0z" fill="#B9B4FF"/></svg>
       </div>
 
-      <div class="r-kicker" id="r-kicker"></div>
-      <h2 id="r-title"></h2>
-      <p class="desc" id="r-desc"></p>
-      <p class="sub" id="r-sub"></p>
+      <div>
+        <div class="r-kicker" id="r-kicker"></div>
+        <h2 id="r-title"></h2>
+        <p class="desc" id="r-desc"></p>
+        <p class="sub" id="r-sub"></p>
+      </div>
+      </div>
 
       <div class="recs" id="recs"></div>
 
@@ -658,6 +758,7 @@
 
   function show(name) {
     Object.keys(screens).forEach(function (k) { screens[k].hidden = (k !== name); });
+    document.body.setAttribute("data-screen", name);
     window.scrollTo({ top: 0, behavior: "auto" });
     renderCounter();
   }
@@ -754,7 +855,7 @@
 
   function blockHTML(title, inner) { return '<div class="block"><h3>' + title + "</h3>" + inner + "</div>"; }
   function libHTML() {
-    return '<div class="lib"><div><div class="rt">' + LIB.t + "</div><p>" + LIB.d + ' <a class="lib-url" href="' + LIB.url + '" target="_blank" rel="noopener">dlibrary.stanford.edu/ambiguity</a></p></div><a class="btn" href="' + LIB.url + '" target="_blank" rel="noopener">Открыть библиотеку <span class="arr">→</span></a></div>';
+    return '<div class="lib"><img class="lib-img" src="img/flashlight.webp" alt="" aria-hidden="true"><div><div class="rt">' + LIB.t + "</div><p>" + LIB.d + ' <a class="lib-url" href="' + LIB.url + '" target="_blank" rel="noopener">dlibrary.stanford.edu/ambiguity</a></p></div><a class="btn" href="' + LIB.url + '" target="_blank" rel="noopener">Открыть библиотеку <span class="arr">→</span></a></div>';
   }
   function tryHTML(k) {
     return '<div class="rec-list">' +
@@ -769,7 +870,7 @@
     return '<div class="rec-list rec-list--books">' + itemHTML({ t: COMBOS[keys[0]].book.t, d: COMBOS[keys[0]].book.d, book: true }) + "</div>";
   }
   function commonHTML() {
-    return libHTML() + '<div class="rec-list rec-list--books">' + COMMON.map(function (it) { return itemHTML(it); }).join("") + "</div>";
+    return libHTML() + '<div class="rec-list rec-list--books rec-list--common">' + COMMON.map(function (it) { return itemHTML(it); }).join("") + "</div>";
   }
   // для раскрывающихся карточек среднего диапазона
   function recsHTML(k) {
@@ -899,7 +1000,10 @@
     }
   }
 
-  $("btn-start").addEventListener("click", function () { track("quiz_start"); show("quiz"); renderQuestion(); });
+  var startQuiz = function () { track("quiz_start"); show("quiz"); renderQuestion(); };
+  $("btn-start").addEventListener("click", startQuiz);
+  document.querySelectorAll(".js-start").forEach(function (b) { b.addEventListener("click", startQuiz); });
+  document.body.setAttribute("data-screen", "start");
   $("btn-next").addEventListener("click", next);
   $("btn-back").addEventListener("click", back);
   $("btn-restart").addEventListener("click", restart);
