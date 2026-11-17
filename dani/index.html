@@ -437,15 +437,17 @@
   .backdrop { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: center / cover no-repeat; opacity: 0; transition: opacity 1.2s var(--ease); }
   .backdrop--quiz { background-image: url(img/stars.webp); }
   .backdrop--result { background-image: url(img/star.webp); }
-  body[data-screen="quiz"] .backdrop--quiz { opacity: .32; }
-  body[data-screen="result"] .backdrop--result { opacity: .28; }
+  body[data-screen="quiz"] .backdrop--quiz { opacity: .18; }
+  body[data-screen="result"] .backdrop--result { opacity: .12; }
+  .shade { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: #020617; opacity: 0; transition: opacity 1s var(--ease); }
+  body[data-screen="quiz"] .shade, body[data-screen="result"] .shade { opacity: .5; }
 
-  .hero { position: relative; overflow: hidden; border-radius: 6px; min-height: 560px; display: flex; align-items: center; background: #0A2550; margin: 8px 0 44px; isolation: isolate; }
+  .hero { position: relative; overflow: hidden; width: 100vw; margin: -12px 0 48px calc(50% - 50vw); min-height: min(78vh, 720px); display: flex; align-items: center; background: #0A2550; isolation: isolate; }
   .hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 70% center; z-index: -2; animation: heroIn 1.8s var(--ease) both, heroFloat 14s ease-in-out 1.8s infinite alternate; }
-  .hero::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(2,6,23,.82) 0%, rgba(2,6,23,.45) 42%, rgba(2,6,23,0) 68%); }
+  .hero::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(2,6,23,.82) 0%, rgba(2,6,23,.45) 42%, rgba(2,6,23,0) 68%), linear-gradient(0deg, rgba(2,6,23,.55) 0%, rgba(2,6,23,0) 30%); }
   @keyframes heroIn { from { opacity: 0; transform: scale(1.08); } to { opacity: 1; transform: none; } }
   @keyframes heroFloat { from { transform: scale(1); } to { transform: scale(1.04) translateX(-1%); } }
-  .hero-text { padding: 56px; max-width: 640px; }
+  .hero-text { box-sizing: content-box; padding: 64px 32px 64px max(32px, calc((100vw - var(--w)) / 2 + 32px)); max-width: 620px; }
   .hero-text h1 { margin-bottom: 20px; }
   .hero-text .lead { margin-bottom: 28px; color: var(--text); }
   .kicker { display: inline-block; font-size: 13px; font-weight: 700; color: var(--night); background: linear-gradient(90deg, var(--lilac), var(--peach)); border-radius: 999px; padding: 5px 13px; margin-bottom: 20px; }
@@ -482,7 +484,7 @@
   .rec-list.rec-list--common { grid-template-columns: repeat(3, 1fr); }
 
   .lib { position: relative; overflow: hidden; min-height: 230px; padding: 30px 34px; border: 0; color: var(--text);
-    background: linear-gradient(110deg, #142F6B 0%, #2B2F7E 55%, #432A73 100%); }
+    background: linear-gradient(90deg, rgba(4,12,36,.9) 0%, rgba(4,12,36,.45) 50%, rgba(4,12,36,0) 100%), url(img/stars.webp) right center / cover no-repeat, #0B2A5A; }
   .lib > div, .lib > .btn { position: relative; z-index: 1; }
   .lib > div { max-width: 58%; }
   .lib p { color: #E4E2FA; }
@@ -501,14 +503,14 @@
   }
 
   @media (max-width: 720px) {
-    .hero { flex-direction: column; align-items: stretch; min-height: 0; }
+    .hero { flex-direction: column; align-items: stretch; min-height: 0; margin-top: -8px; }
     .hero-img { position: relative; height: 280px; object-position: 82% 30%; z-index: 0; }
     .hero::before { display: none; }
-    .hero-text { padding: 22px 20px 28px; }
+    .hero-text { box-sizing: border-box; max-width: none; padding: 22px 16px 30px; }
     .howto { grid-template-columns: 1fr; padding: 24px 20px; }
     .howto .btn { justify-self: start; }
     .rec-list.rec-list--common { grid-template-columns: 1fr; }
-    .lib { padding: 24px 20px 180px; }
+    .lib { padding: 24px 20px; background: linear-gradient(0deg, rgba(4,12,36,.88), rgba(4,12,36,.55)), url(img/stars.webp) center / cover no-repeat, #0B2A5A; }
     .lib > div { max-width: none; }
     .lib-img { top: auto; bottom: -70px; right: -20px; width: 240px; transform: rotate(-6deg); animation: none; }
     .options { grid-template-columns: 1fr; gap: 8px; }
@@ -540,6 +542,7 @@
 <div class="ambient" aria-hidden="true"><i></i><i></i><i></i></div>
 <div class="backdrop backdrop--quiz" aria-hidden="true"></div>
 <div class="backdrop backdrop--result" aria-hidden="true"></div>
+<div class="shade" aria-hidden="true"></div>
 
 <div class="app">
   <div class="topbar">
@@ -573,8 +576,6 @@
           <div class="scale-card"><div class="k">Утверждения 11–20</div><div class="t">Действия</div><p>Что вы предпринимаете, чтобы разобраться в ситуации и двигаться вперёд.</p></div>
         </div>
       </div>
-
-      <img class="band" src="img/lighthouse.webp" alt="" aria-hidden="true">
 
       <div class="howto">
         <div>
@@ -855,7 +856,7 @@
 
   function blockHTML(title, inner) { return '<div class="block"><h3>' + title + "</h3>" + inner + "</div>"; }
   function libHTML() {
-    return '<div class="lib"><img class="lib-img" src="img/flashlight.webp" alt="" aria-hidden="true"><div><div class="rt">' + LIB.t + "</div><p>" + LIB.d + ' <a class="lib-url" href="' + LIB.url + '" target="_blank" rel="noopener">dlibrary.stanford.edu/ambiguity</a></p></div><a class="btn" href="' + LIB.url + '" target="_blank" rel="noopener">Открыть библиотеку <span class="arr">→</span></a></div>';
+    return '<div class="lib"><div><div class="rt">' + LIB.t + "</div><p>" + LIB.d + ' <a class="lib-url" href="' + LIB.url + '" target="_blank" rel="noopener">dlibrary.stanford.edu/ambiguity</a></p></div><a class="btn" href="' + LIB.url + '" target="_blank" rel="noopener">Открыть библиотеку <span class="arr">→</span></a></div>';
   }
   function tryHTML(k) {
     return '<div class="rec-list">' +
