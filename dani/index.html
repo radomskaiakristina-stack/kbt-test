@@ -202,6 +202,12 @@
   .rec-list--books { grid-template-columns: 1fr; }
   .rec--book .tag { display: inline-block; font-size: 11px; font-weight: 700; color: var(--yellow); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 4px; }
   .acc-wrap { margin-bottom: 26px; }
+  .rec--try { display: flex; flex-direction: column; }
+  .rt-link { color: inherit; text-decoration: none; }
+  .rt-link:hover { color: var(--yellow); }
+  .rec-go { align-self: flex-start; margin-top: 14px; font-size: 14px; font-weight: 700; color: var(--yellow); text-decoration: none; border-bottom: 1px solid rgba(255,214,107,.4); padding-bottom: 1px; transition: border-color .2s; }
+  .rec-go:hover { border-bottom-color: var(--yellow); }
+  .rec p { flex: 1; }
   .scale-card .t small { display: block; font-size: 13px; color: var(--muted); font-weight: 400; margin-top: 4px; }
 
   /* ---------- Buttons ---------- */
@@ -710,14 +716,14 @@
   var LVL_NAME = { low: "Низкий", mid: "Средний", high: "Высокий" };
 
   var TRY = {
-    quest: { t: "The Quest for Questions", d: "Учебный проект, где вместо готового решения нужно представить вопрос, который стоит исследовать дальше. Участники две с половиной недели изучают проблему, смотрят на неё с разных сторон и уточняют свои предположения." },
-    maps: { t: "Ambiguity Journey Maps", d: "Нарисуйте свой путь через три зоны неопределённости: погружение, дискомфорт и открытия. Отметьте моменты растерянности, смену планов и неожиданные находки. Так видно, как отношение к неизвестному меняется по ходу сложной работы." },
-    zones: { t: "Learning Zone Reflection Tool", d: "Упражнение на основе трёх зон: комфорта, обучения и паники. Вспомните свой опыт и определите, в какой зоне происходили события. Станет понятно, когда неопределённость помогает учиться, а когда перегружает, и что помогает сохранять опору." },
-    zonesShort: { t: "Learning Zone Reflection Tool", d: "Упражнение про три зоны: комфорта, обучения и паники. Оно помогает увидеть, когда неопределённость полезна, а когда становится перегрузкой." },
-    dear: { t: "Dear Ambiguity", d: "Обратитесь к неопределённости как к собеседнику: вспомните личные истории, сделайте небольшой объект и напишите ей открытку. Необычный способ разобраться в своих переживаниях, от страха и раздражения до любопытства." },
-    super: { t: "Navigating Ambiguity, the Super Ability", d: "Статья о том, из чего складывается умение действовать в неопределённости: рассматривать несколько вариантов одновременно, не торопиться с ответом, менять подход по ходу работы и пересматривать постановку проблемы." },
-    methods: { t: "Teaching Methods", d: "Четыре подхода, которыми пользуются в Стэнфорде: осознание собственных реакций, постепенное привыкание к неопределённости через практику, развитие гибкости и освоение разных способов решения задач." },
-    methodsShort: { t: "Teaching Methods", d: "Подходы из Стэнфорда, среди них постепенное привыкание к неопределённости через практику. Подойдёт, чтобы двигаться маленькими шагами." }
+    quest: { t: "The Quest for Questions", url: "https://dlibrary.stanford.edu/ambiguity/design-project-the-quest-for-questions", d: "Учебный проект, где вместо готового решения нужно представить вопрос, который стоит исследовать дальше. Участники две с половиной недели изучают проблему, смотрят на неё с разных сторон и уточняют свои предположения." },
+    maps: { t: "Ambiguity Journey Maps", url: "https://dlibrary.stanford.edu/ambiguity/ambiguity-journey-maps", d: "Нарисуйте свой путь через три зоны неопределённости: погружение, дискомфорт и открытия. Отметьте моменты растерянности, смену планов и неожиданные находки. Так видно, как отношение к неизвестному меняется по ходу сложной работы." },
+    zones: { t: "Learning Zone Reflection Tool", url: "https://dlibrary.stanford.edu/ambiguity/learning-zone-reflection-tool", d: "Упражнение на основе трёх зон: комфорта, обучения и паники. Вспомните свой опыт и определите, в какой зоне происходили события. Станет понятно, когда неопределённость помогает учиться, а когда перегружает, и что помогает сохранять опору." },
+    zonesShort: { t: "Learning Zone Reflection Tool", url: "https://dlibrary.stanford.edu/ambiguity/learning-zone-reflection-tool", d: "Упражнение про три зоны: комфорта, обучения и паники. Оно помогает увидеть, когда неопределённость полезна, а когда становится перегрузкой." },
+    dear: { t: "Dear Ambiguity", url: "https://dlibrary.stanford.edu/ambiguity/dear-ambiguity", d: "Обратитесь к неопределённости как к собеседнику: вспомните личные истории, сделайте небольшой объект и напишите ей открытку. Необычный способ разобраться в своих переживаниях, от страха и раздражения до любопытства." },
+    super: { t: "Navigating Ambiguity, the Super Ability", url: "https://dlibrary.stanford.edu/navigating-ambiguity", d: "Статья о том, из чего складывается умение действовать в неопределённости: рассматривать несколько вариантов одновременно, не торопиться с ответом, менять подход по ходу работы и пересматривать постановку проблемы." },
+    methods: { t: "Teaching Methods", url: "https://dlibrary.stanford.edu/teaching-methods", d: "Четыре подхода, которыми пользуются в Стэнфорде: осознание собственных реакций, постепенное привыкание к неопределённости через практику, развитие гибкости и освоение разных способов решения задач." },
+    methodsShort: { t: "Teaching Methods", url: "https://dlibrary.stanford.edu/teaching-methods", d: "Подходы из Стэнфорда, среди них постепенное привыкание к неопределённости через практику. Подойдёт, чтобы двигаться маленькими шагами." }
   };
 
   var COMBOS = {
@@ -849,7 +855,7 @@
   var LIB = { t: "Library of Ambiguity", url: "https://dlibrary.stanford.edu/ambiguity",
     d: "Статьи, книги и упражнения о том, как мы воспринимаем неопределённость, реагируем на неизвестность и учимся действовать без готовых ответов. Её собрали авторы теста:" };
   var COMMON = [
-    { t: "Ambiguity Archetypes", d: "Авторы выделили три подхода на основе метафор примерно 150 участников образовательных программ: стремление поскорее преодолеть неопределённость (Endure), готовность взаимодействовать с ней (Engage) и принятие её как возможности для открытий (Embrace)." },
+    { t: "Ambiguity Archetypes", url: "https://dlibrary.stanford.edu/ambiguity-archetypes", d: "Авторы выделили три подхода на основе метафор примерно 150 участников образовательных программ: стремление поскорее преодолеть неопределённость (Endure), готовность взаимодействовать с ней (Engage) и принятие её как возможности для открытий (Embrace)." },
     { t: "Ханс Рослинг, «Фактологичность»", d: "О десяти когнитивных ловушках, из-за которых мир кажется хуже, чем он есть.", book: true },
     { t: "Билл Бернетт и Дэйв Эванс, «Дизайн вашей жизни»", d: "Инструменты дизайн-мышления для важных жизненных решений.", book: true }
   ];
@@ -860,12 +866,13 @@
   }
   function tryHTML(k) {
     return '<div class="rec-list">' +
-      COMBOS[k].tries.map(function (id) { return '<div class="rec rec--try"><div class="rt">' + TRY[id].t + "</div><p>" + TRY[id].d + "</p></div>"; }).join("") + "</div>";
+      COMBOS[k].tries.map(function (id) { return itemHTML(TRY[id]); }).join("") + "</div>";
   }
   function itemHTML(it, tag) {
     return it.book
       ? '<div class="rec rec--book"><span class="book" aria-hidden="true"></span><div>' + (tag ? '<div class="tag">' + tag + "</div>" : "") + '<div class="rt">' + it.t + "</div><p>" + it.d + "</p></div></div>"
-      : '<div class="rec rec--try"><div class="rt">' + it.t + "</div><p>" + it.d + "</p></div>";
+      : '<div class="rec rec--try"><div class="rt">' + (it.url ? '<a class="rt-link" href="' + it.url + '" target="_blank" rel="noopener">' + it.t + "</a>" : it.t) + "</div><p>" + it.d + "</p>" +
+        (it.url ? '<a class="rec-go" href="' + it.url + '" target="_blank" rel="noopener">Открыть <span aria-hidden="true">↗</span></a>' : "") + "</div>";
   }
   function readHTML(keys) {
     return '<div class="rec-list rec-list--books">' + itemHTML({ t: COMBOS[keys[0]].book.t, d: COMBOS[keys[0]].book.d, book: true }) + "</div>";
